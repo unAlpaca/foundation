@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function test(str) {
+        let n = '';
+        for(let i of str) {
+            String(Number(i)) == 'NaN' ? n = n + ',' + i: n += i;
+        }
+        let new_str = n.substring(1).split(',').sort().sort(
+            (a, b) => {
+                console.log(a[0]+'..' + b[0]);
+                if( a[0] == b[0]) {
+                    return a.substring(1) - b.substring(1);
+                }
+            }
+        ).join('');
+        console.log(new_str)
+        return new_str;
+    }
+    test('b1a8c6d5b4b5c7a2')
+</script>
+</body>
+</html>

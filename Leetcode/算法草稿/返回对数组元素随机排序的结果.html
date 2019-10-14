@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/html">
+    let a = [1,2,3,4,5,6,7,8,9];
+    Array.prototype.suiji = function () {
+        let arr=this;
+        let max = this.length;
+        for (let i = 0;i<max;i++){
+            let j = parseInt(Math.random() * max);
+            let temple = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temple
+        }
+        return arr
+    }
+    console.log(a.suiji());
+</script>
+<script>
+    function randomSort(a){
+        var arr = a,
+            random = [],
+            len = arr.length;
+        for (var i = 0; i < len; i++) {
+            var index = Math.floor(Math.random()*(len - i));
+            random.push(a[index]);
+            arr.splice(index,1);
+        }
+        return random;
+    }
+
+    var a = [1,2,3,4,5,6,7,8,9,10];
+    console.log(randomSort(a));
+    console.log(a);
+</script>
+</body>
+</html>

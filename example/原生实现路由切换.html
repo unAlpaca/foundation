@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+        .header{
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            background-color: rgb(198,195,212);
+            color: #865a5a;
+        }
+        .section_left{
+            float: left;
+            width: 16%;
+            height: 500px;
+            background-color: rgb(173,145,145);
+        }
+
+        .section_left ul li{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-bottom:1px solid #FFFFFF;
+            cursor:pointer;
+        }
+        .sidebar_right{
+            float: right;
+            width: 78%;
+            height: 470px;
+            line-height: 470px;
+            text-align: center;
+            background-color: rgb(105,90,90);
+            margin:15px 3% 0 0;
+            border-radius: 10px;
+            color: #e6cdcd;
+        }
+        .footer{
+            clear: both;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            background-color: rgb(190,195,212);
+            color: #925959;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <h1>我是头部</h1>
+</header>
+<!--左侧导航-->
+<section class="section_left">
+    <ul>
+        <li><a href="#">默认菜单</a></li>
+        <li><a href="#/html">HTML学习</a></li>
+        <li><a href="#/css">css学习</a></li>
+        <li><a href="#/js">javascript学习</a></li>
+    </ul>
+</section>
+
+<!--右侧内容-->
+<sidebar class="sidebar_right">
+    <h1>我是默认内容</h1>
+</sidebar>
+
+<!--底部-->
+<footer class="footer">
+    <h1>我是底部</h1>
+</footer>
+<script>
+    /**
+     * 实现思路：
+     * 1.利用<a>标签进行url的切换，然后js代码检测url的变化。
+     * 2.<a>标签的href必须以#开头，如<a href="#/...">。因为有#，页面不会向服务器请求资源
+     *    则不会刷星页面，这也是单页面应用程序路由切换的原理
+     * 3.通过检测#后面的变化值，再浏览器中，每一个url都是hash值，所以实际上我们检测的是url的hash值变化
+     *   所以这种路由方式也成为hash路由
+     *
+     * 实现过程：
+     *1.设置一个自执行函数，保证代码不被污染
+     *2.再自执行函数里面添加一个构造函数
+     *3.在构造函数的原型对象上添加一些函数。
+     *4.利用window.object = function()将函数暴露出去*/
+
+    //自执行函数
+    (function () {
+        //向外面暴露的就是这个Router函数，在外部环境（window）通过new调用了构造器的方法（L120），
+        // 所以下面的这个this指向的是new出来的新的实例。
+        var Router = function () {
+            this.routes = {}; //保存路由
+            this.curUrl = ''; //获取当前的hash值
+        }
+
+        //给函数Router定义公用的方法，所以通过在原型上添加。
+        //init初始化，reloadPage：切换hash值，map:设置不同url对应的方法
+        Router.prototype.init = function () {
+            //hashchange事件，当hash变化时，调用reloadPage事件
+            window.addEventListener('hashchange',this.reloadPage.bind(this))
+            /**第一个this指向Router，第二个this，指向其实例，
+             * 这句就是执行reloadPage方法，但是reloadPage方法里要执行this.routes[this.curUrl]()
+            this.routes在初始化的时候根本没有东西，所以不能直接使用，
+             整句意思就是给window添加一个方法，执行当前hash值对应的callback方法*/
+        }
+
+        Router.prototype.reloadPage = function () {
+            this.curUrl = location.hash.substring(1)||'/'; //获取当前hash的值去掉#
+            this.routes[this.curUrl]() //运行当前hash值对应的函数
+        }
+
+        //这里通过定义map函数来确定 hash值对应的函数，并保存
+        Router.prototype.map = function (key,callback) {
+            this.routes[key] = callback;
+        }
+
+        window.oRou = Router;
+    })()
+
+
+    console.log(location.hash);
+    var oRouter2 = new oRou();
+    oRouter2.init();
+    var oSidebar = document.querySelector("sidebar");
+    oRouter2.map('/',function () {
+        oSidebar.innerHTML = '我是主页'
+        console.log(location.hash);
+        console.log(this.routes) 
+    });
+    oRouter2.map('/html',function () {
+        oSidebar.innerHTML = '我是HTML'
+        console.log(location.hash);
+    });
+    oRouter2.map('/css',function () {
+        oSidebar.innerHTML = '我是CSS'
+        console.log(location.hash);
+    });
+    oRouter2.map('/js',function () {
+        oSidebar.innerHTML = '我是JS'
+        console.log(location.hash);
+    });
+</script>
+</body>
+</html>

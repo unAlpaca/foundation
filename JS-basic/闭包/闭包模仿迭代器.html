@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var mofangIterator = (function () {
+
+       var nextVal;     //作用域内定义一个变量
+
+       return function () {
+           if (nextVal === undefined) {
+               nextVal =1
+           }else {
+               nextVal = 2 * nextVal +1
+           }
+
+           return nextVal         //返回变量，每次闭包调用就会回来更新这个变量
+       }
+    })()
+
+    console.log(mofangIterator()); //1
+    console.log(mofangIterator()); //3
+    console.log(mofangIterator()); //7
+    console.log(mofangIterator()); //15
+    console.log(mofangIterator()); //31
+    /**
+     * 但是迭代器返回的是一个对象，且通过 .next来调用
+     * 版本2如下，版本2才能称之为迭代器，版本1只能叫闭包*/
+</script>
+<script>
+    var mofangIterator2 = (function () {
+
+        var nextVal;
+
+        return {
+            [Symbol.iterator]:function(){    //这个[Symbol.iterator]是一个属性，用来定义for of循环的
+                return this
+            },
+
+            next:function () {                //标准迭代器接口方法
+                if (nextVal === undefined) {
+                    nextVal =1
+                }else {
+                    nextVal = 2 * nextVal +1
+                }
+
+                return {done:false,value:nextVal}     //因为这个done是定死的false，所以可以无限制的next下去
+                                                      //对于for of 的话 就会无限循环，使用时 用if给个限制条件
+            }
+        }
+    })()
+
+    mofangIterator2(); //1
+    mofangIterator2(); //3
+    mofangIterator2(); //7
+    mofangIterator2(); //15
+</script>
+</body>
+</html>

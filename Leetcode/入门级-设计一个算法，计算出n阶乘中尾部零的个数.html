@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>T入门级-设计一个算法，计算出n阶乘中尾部零的个数</title>
+</head>
+<body>
+<script type="text/html">
+    (function () {
+        var trailingZeros = function (n) {
+            var sum = 1;
+            for (var i = 1; i <= n; i++) {
+                sum *= i;
+                console.log(sum);
+            }
+            var t = 0;
+            for (var j = 0; sum % 10 == 0;j++) {
+                sum = sum /10;
+                t++;
+            }
+            console.log(t);
+            return t
+        };
+        console.log(trailingZeros(105));;
+    })()
+
+</script>
+<script >
+    (function () {
+        var trailingZeros = function (n) {
+            var t = 0;
+            for (var i = 5; n > i; i *= 5) {
+                t += parseInt(n/i);
+            }
+            console.log(i);
+            return t
+        };
+        console.log(trailingZeros(11));
+
+    })()
+
+</script>
+</body>
+</html>

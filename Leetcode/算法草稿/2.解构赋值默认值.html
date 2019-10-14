@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let [foo = true] = [];
+    console.log(foo); // 输出true;
+    let [Foo = true] = [ "unbiu"];
+    console.log(Foo); // unbiu
+
+//    如果一个数组成员不严格等于undefined的时候，默认值是不会生效的。
+//    如果一个数组成员严格等于undefined的时候，默认值生效。
+
+    let [zoo = true] = [null];
+    console.log(zoo); // 输出 null,并不输出undefined；
+
+    let [Poo = true] = [undefined];
+    console.log(Poo);  //输出true
+</script>
+</body>
+</html>

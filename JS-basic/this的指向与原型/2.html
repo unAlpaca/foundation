@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function foo() {
+        return (a) => {
+            /**this继承于foo，foo的this指向谁就是谁*/
+            console.log(this.a);
+        }
+    }
+
+    var obj1 = {
+        a: 1
+    }
+
+    var obj2 = {
+        a: 2
+    }
+
+    var bar = foo.call(obj1);
+    /**相当于有一个对象的方法在OBJ1执行,结果就是
+     * obj1 = {
+     *   a:2,
+     *   (a)=> {
+                return (a) => {console.log(this.a) };
+                   }
+             }
+     *这个foo其实已经执行了，所以是foo的返回函数是OBJ1的内部的方法
+     * 而这个bar就相当于指向这个方法，且这个函数的this通过箭头函数的形式已经绑定到了foo，与foo一致。
+     * 即，谁调用foo,this指向谁
+     * */
+    console.log(obj1);
+
+    /**
+     * 这个Obj1中没有显现有新增方法，说明，运行编译时候操作的还是函数本身，操作的是给该函数换掉了执行环境
+     * 以上第一段解释只能说明我站在了Obj的视角，但是并不以obj1为主体，操作的是函数而不是Obj1
+     * */
+
+    bar.call(obj2);
+
+    /**
+     * bar,即obj1中的那个函数，该函数在obj2中执行
+     *
+     * obj2 = {
+     *  a: 2,
+         执行中：console.log(this.a)
+       }
+     这个this继承于foo，foo的this指向谁就是谁，而foo指向obj1，
+     所以即便是obj2调用，且往后无论谁继续调用，this也不再动态绑定，
+     也满足了this只往上寻找一层的规定，foo只往上找了一层。
+     所以输出1*/
+</script>
+<script>
+    function foo() {
+        return function () {
+            return function (a) {
+                console.log(this.a);
+            }
+        }
+    }
+
+    var obj1 = {
+        a: 1
+    }
+
+    var obj2 = {
+        a: 2
+    }
+
+    var obj3 = {
+        a: 3
+    }
+
+    var bar = foo.call(obj1);
+    var too = bar.call(obj2);
+    too.call(obj3); //3
+
+    /**
+     * 这个this是动态绑定的,所以谁调用，this指向谁
+     * 且this只向上找一层，所以嵌套3层需要多return一层*/
+</script>
+</body>
+</html>

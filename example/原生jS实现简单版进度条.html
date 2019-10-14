@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #wrapper{
+            width: 200px;
+            height: 100px;
+            border: 1px solid #000;
+            margin: 100px auto;
+        }
+
+        #progressbar{
+            width: 180px;
+            height: 20px;
+            margin: 0 auto;
+            margin-top: 40px;
+            border: 1px solid #000;
+        }
+
+        #filler{
+            animation:move 2s linear;
+            text-align: center;
+            background-color: #6caf00;
+            color: #FFFFFF;
+        }
+        @keyframes move {
+            0%{
+                width: 0;
+            }
+            100%{
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<!--最外层容器-->
+<div id="wrapper">
+
+    <!-- 进度条容器-->
+    <div id="progressbar">
+
+        <!--进度条-->
+        <div id="filler"></div>
+        <!--因为filler这个div里没有内容所以，动画看不见，只有在自调用init后，给内容写入了，2者结合才开始显示-->
+    </div>
+</div>
+<script>
+    (function () {
+        var progressbar = {
+            init:function () {
+                var fill = document.getElementById("filler");
+                var count = 0;
+                var timer = setInterval(()=>{
+                    count++;
+                    fill.innerHTML = count + '%';
+                    if (count ===100){
+                        clearInterval(timer)
+                    }
+                },17);
+            }
+        }
+        progressbar.init();
+    })()
+</script>
+</body>
+</html>

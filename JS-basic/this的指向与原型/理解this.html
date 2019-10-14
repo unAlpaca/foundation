@@ -1,0 +1,30 @@
+r<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var name = 'window';
+    var a = 1;
+    var b = 1;
+    var object = {
+        name:'my Object',
+        a:20,
+        b:20,
+        getName:function() {
+            console.log(this.a + this.b);
+            console.log("1" + this.name);
+            return function () {
+                console.log(this.a + this.b);
+                console.log("2" + this.name);
+            }
+        }
+    }
+    object.getName();
+    console.log('。。。。。。。。。。。。。。。。。。。。分割线');
+    object.getName()();
+</script>
+</body>
+</html>

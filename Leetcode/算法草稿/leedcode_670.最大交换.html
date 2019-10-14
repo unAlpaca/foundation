@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /**
+     给定一个非负整数，你可以交换两个数字最多一次，以获得最大价值数。返回您可以获得的最大值。
+
+     例1：
+     输入： 2736
+     输出： 7236
+     说明：交换数字2和数字7。
+
+     例2：
+     输入： 9973
+     输出： 9973
+     说明：无交换。
+     注意：
+     给定的数字在[0,10 8 ] 范围内
+     */
+    /**
+     * @param {number} num
+     * @return {number}
+     */
+    var maximumSwap = function (num) {
+        var arrayA = String(num).split("");//传入的是数字，split这个方法是属于字符串的，所以要转化一下
+        //找最大的值与这个最大值最后出现的索引
+        var maxValue = null;
+        var maxValueIndex = null;
+        for (var i = 0; i < arrayA.length; i++) {
+            for (var j = i+1; j < arrayA.length; j++) {
+                if (arrayA[i] > arrayA[j]) {
+                    maxValue = arrayA[i];
+                    maxValueIndex = i;
+                }
+            }
+        }
+        //讲道理，把最大数字的值提到第一位即可；但是如果第一位就是最大值，则相当于不会进行操作。
+        arrayA.splice(maxValueIndex,1);
+        arrayA.unshift(maxValue);
+        var result = arrayA.join("");
+
+        // console.log(maxValueIndex);
+        // console.log(maxValue);
+        // console.log(arrayA);
+        // console.log(result);
+        console.log(result);
+    };
+    maximumSwap(2736);
+</script>
+</body>
+</html>

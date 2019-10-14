@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    Array.prototype.quchong = function () {
+        var arr = this;
+        var result = [];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[i] === arr[j]) {
+                    j = ++i;
+                }
+            }
+            result.push(arr[i]);
+        }
+        return result;
+    }
+    var arra = [1, 1, 1, 1, 4, 5, 6, 7];
+    console.log(arra.quchong());   //返回[1,4,5,6,7]
+</script>
+
+<script>
+    Array.prototype.quchong = function () {
+        //1.定义新函数和接收结果的变量
+        var arrB = this.sort(function (a, b) {
+            a - b
+        });
+        console.log(arrB);
+        var result = [];
+        //2.去重,用2层循环，外层循环数组，内层检查重复
+        for (var i = 0; i < arrB.length; i++) {
+            for (var j = i + 1; j < arrB.length; j++) {
+                if (arrB[i] === arrB[j]) {
+                    result = arrB.splice(j, 1);
+                    j--;
+                    arrB.length--;
+                }
+            }
+        }
+        return result;
+    };
+    var arr = [1, 2, 4, 5, 1, 1, 2, 4];
+    console.log(arr.quchong());
+</script>
+<script>
+    Array.prototype.distinct = function () {
+        var arr = this;
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[i] == arr[j]) {
+                    arr.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        return arr;
+    };
+    var a = [1, 2, 3, 4, 5, 6, 5, 3, 2, 4, 56, 4, 1, 2, 1, 1, 1, 1, 1, 1,];
+    var b = a.distinct();
+    console.log(b.toString()); //1,2,3,4,5,6,56
+</script>
+</body>
+</html>

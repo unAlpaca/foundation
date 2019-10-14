@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 400px;
+            height: auto;
+            margin: 50px auto 0 auto;
+            border: 1px solid #222222;
+        }
+
+        /*内容区域*/
+        #cont {
+            width: 400px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #go {
+            width: 100%;
+            height: 200px;
+            line-height: 50px;
+            text-align: center;
+            font-family: '微软雅黑';
+            font-size: 30px;
+            z-index: 11199;
+        }
+
+        #main {
+            width: 400px;
+            height: 600px;
+            position: relative;
+            top: -150px;
+        }
+
+        .row {
+            width: 400px;
+            height: 150px;
+        }
+
+        .row div {
+            width: 98px;
+            height: 148px;
+            border: 1px solid #222222;
+            float: left;
+            cursor: pointer;
+        }
+
+        #count {
+            width: 400px;
+            height: 50px;
+            text-align: center;
+            border-top: 1px solid #222222;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<!--在最外层的盒子-->
+<div class="box">
+    <!--上层游戏层-->
+    <div id="cont">
+        <div id="go">
+            <span id="start">点击开始</span>
+        </div>
+
+        <!--游戏内容，格子下降的展示部分-->
+        <div id="main"></div>
+
+        <!--//显示得分区域-->
+        <div id="count"></div>
+    </div>
+</div>
+<script >
+    window.onload = function () {
+        var main = document.getElementById('main');
+        var go = document.getElementById('go');
+        var count = document.getElementById('count');
+        console.log(1);
+
+        //2.添加动态创键div节点的方法
+        function CDiv(classname) {
+            //创建DIV节点，为一行,这个DIV里面有4个格子
+            var Div = document.createElement('div');
+            //设置class
+            Div.className = classname;
+
+            //4个格子
+            for (var i = 0; i < 4; i++) {
+                var iDiv = document.createElement('div');
+                Div.appendChild(iDiv)
+            }
+            //判断#main里面是否有元素,将创建的一行(4个格子)插入到#main内部，
+            if (main.children.length == 0) {
+                main.appendChild(Div);
+            } else {
+                //main这个区域有一个-150px的空间，这里就是这个插入的地方
+                main.insertBefore(Div, main.children[0])
+            }
+
+            //生成随机数，这个数是4个格子中，需要点击的那一个。
+            var index = Math.floor(Math.random() * 4);
+            //随机设置4个div块中，需要点击那个div的背景颜色。也可以直接就用黑色
+            // var cols = ['#1AABBA','#E15650','#121B39','#80A84E'];
+            Div.children[index].style.backgroundColor = '#222222';
+            Div.children[index].className = 'needDian';
+        }
+
+        //3.添加移动效果的方法
+        function move(obj) {
+            //默认的速度，分数
+            var speed = 5, num = 0;
+            //盒子加速
+            if (num % 10 == 0) {
+                speed++;
+            }
+
+            //定义一个定时器
+            obj.timer = setInterval(function () {
+                //速度,获取#main的-150px，不断的设置top值来移动，当这个-150px到0，就开始创建格子
+                //创建完格子，就将#main的位置上升-150px复原，因为会产生第二行所以第一行不会跟着#main回来复原
+                //而原先的位置由第二行占据，所以第一行看起来是一直往下。
+                //实际是第一行想回去，但是被新生的行不断卡主，。
+                var step = parseInt(getComputedStyle(obj, null)['top']) + speed;
+                obj.style.top = step + 'px';
+                if (parseInt(getComputedStyle(obj, null)['top']) >= 0) {
+                    CDiv('row');
+                    obj.style.top = '-150px';
+                }
+
+                //点击计分，点击后消除needDian这个类名
+                obj.onmousedown = function (event) {
+                    //获取到点击的具体元素
+                    var e = event || window.event;
+                    var target = e.target || e.srcElement;
+
+                    if (target.className == 'needDian') {
+                        target.className = null;  //消除类名，不然认定没点击，超出边界则游戏判定结束
+                        target.style.backgroundColor = 'grey';
+                        //显示类名
+                        num++;
+                        count.innerHTML = '当前得分 :' + num
+                    } else {
+                        //游戏结束
+                        obj.style.top = '-150px'
+                        count.innerHTML = '游戏结束，最高得分' + num;
+                        clearInterval(obj.timer);
+
+                        //显示开始游戏
+                        go.children[0].innerHTML = '游戏结束,最高得分' + num;
+                        go.style.display = 'block';
+                    }
+                }
+
+                //判断需要点击的格子是否超出了界限
+                if (obj.children.length == 6) {   //这表明#main已经被创建的格子填满
+                    //判断最后一行，超出界限的那一行就是obj.children.length-1，这一个4个格子有没有一个className没点击,
+                    //如果有，则这游戏结束
+                    for (var i = 0; i < 4; i++) {
+                        if (obj.children[obj.children.length - 1].children[i].className == 'needDian') {
+                            //游戏结束
+                            obj.style.top = '-150px'
+                            count.innerHTML = '游戏结束，最高得分' + num;
+                            clearInterval(obj.timer);
+
+                            //显示开始游戏
+                            go.children[0].innerHTML = '游戏结束';
+                            go.style.display = 'block';
+                        }
+                    }
+                    //每次要消除，不然无法判断越界
+                   obj.removeChild(obj.children[obj.children.length - 1])
+                }
+            }, 20)
+        }
+        go.children[0].onclick = function(){
+            if (main.children.length) {
+                //暴力清除main里面所有盒子
+                main.innerHTML = '';
+            }
+            //清空计分
+            count.innerHTML = '游戏开始';
+            //隐藏开始盒子
+            this.parentNode.style.display = "none";
+            move(main);
+        }
+    }
+
+</script>
+<script type="text/html">
+    window.onload =function(){
+        //获取内容区里面得#main和#go，以及获取计数区。
+        var main = document.getElementById('main');
+        var go = document.getElementById('go');
+        var count = document.getElementById('count');
+        //设置四种颜色
+        cols = ['#1AAB8A', '#E15650', '#121B39', '#80A84E'];
+        //动态创建div
+        function CDiv(classname) {
+            //创建div节点，为一行
+            var Div = document.createElement('div')
+            //生成随机数，Math.floor()是四舍五入的作用，产生的数永远不会大于4，产生的随机数表示那个有颜色的那一个
+            index = Math.floor(Math.random() * 4)
+            //设置class
+            Div.className = classname
+
+            //在一行里面动态添加四个div，一行里面的四块
+            for (var i = 0; i < 4; i++) {
+                var iDiv = document.createElement('div')
+                Div.appendChild(iDiv)
+            }
+
+            //判断#main里面是否有元素
+            if (main.children.length == 0) {
+                main.appendChild(Div);
+            } else {
+                //如果有元素，则在该元素之前插入
+                main.insertBefore(Div, main.children[0]);
+            }
+            //随机的设置四个div块的背景颜色
+            Div.children[index].style.backgroundColor = cols[index];
+            Div.children[index].className = "i";
+        }
+        function move(obj) {
+            //默认速度与计分
+            var speed = 5, num = 0;
+            //定义一个定时器
+            obj.timer = setInterval(function () {
+                //速度
+                var step = parseInt(getComputedStyle(obj, null)['top']) + speed;
+                obj.style.top = step + 'px'
+                if (parseInt(getComputedStyle(obj, null)['top']) >= 0) {
+                    CDiv('row');
+                    obj.style.top = -150 + 'px';
+                }
+                if (obj.children.length == 6) {
+                    for (var i = 0; i < 4; i++) {
+                        if (obj.children[obj.children.length - 1].children[i].className == 'i') {
+                            //游戏结束
+                            obj.style.top = '-150px';
+                            count.innerHTML = '游戏结束,最高得分: ' + num;
+                            //关闭定时器
+                            clearInterval(obj.timer);
+                            //显示开始游戏
+                            go.children[0].innerHTML = '游戏结束';
+                            go.style.display = "block";
+                        }
+                    }
+                    obj.removeChild(obj.children[obj.children.length - 1]);
+                }
+                //点击与计分
+                obj.onmousedown = function (event) {
+                    //点击的不是白盒子
+                    // 兼容IE
+                    event = event || window.event;
+                    if ((event.target ? event.target : event.srcElement).className == 'i') {
+                        //点击后的盒子颜色
+                        (event.target ? event.target : event.srcElement).style.backgroundColor = "#bbb";
+                        //清除盒子标记
+                        (event.target ? event.target : event.srcElement).className = '';
+                        //计分
+                        num++;
+                        //显示得分
+                        count.innerHTML = '当前得分: ' + num;
+                    }
+                    else {
+                        //游戏结束
+                        obj.style.top = 0;
+                        count.innerHTML = '游戏结束,最高得分: ' + num;
+                        //关闭定时器
+                        clearInterval(obj.timer);
+                        //显示开始游戏
+                        go.children[0].innerHTML = '游戏结束';
+                        go.style.display = "block";
+                    }
+                    //盒子加速
+                    if (num % 10 == 0) {
+                        speed++;
+                    }
+                }
+                //松开触发停止
+                obj.onmouseup = function (event) {
+                }
+            }, 20)
+        }
+        go.children[0].onclick = function(){
+            if (main.children.length) {
+                //暴力清除main里面所有盒子
+                main.innerHTML = '';
+            }
+            //清空计分
+            count.innerHTML = '游戏开始';
+            //隐藏开始盒子
+            this.parentNode.style.display = "none";
+            move(main);
+        }
+    }
+
+</script>
+</body>
+</html>

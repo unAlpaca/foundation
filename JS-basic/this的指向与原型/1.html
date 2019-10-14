@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Foo() {                  /**这个getName是全局函数，并不属于这个FOO*/
+        getName = function () {
+            console.log(1)
+        };
+        return this
+    }
+
+    Foo.getName = function () {      /**这个getName是Foo的一个局部方法，属于这个FOO* */
+        console.log(2);
+    };
+
+
+    Foo.getName();                  /**直接执行了FOO的实例属性*/
+    var a = new Foo();              /**Foo函数遇到new就会执行了构造函数模式，创建一个新对象，并绑定其原型到自己
+                                        所以*/
+    console.log(a.__proto__ == Foo);
+    // a.getName()
+</script>
+
+</body>
+</html>

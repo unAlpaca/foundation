@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Foo() {
+        getName = function () {
+            console.log(1)
+        };
+        return this
+    }
+    Foo.getName = function () {
+        console.log(2);
+    };
+    Foo.prototype.getName = function () {
+        console.log(3);
+    };
+    var getName = function () {
+        console.log(4);
+    };
+    function getName() {
+        console.log(5);
+    }
+
+    // console.log(window.getName);
+    Foo.getName();//2
+
+         // window.getName();
+
+    getName(); //4  getName的函数声明会提升，所以最后一步是 getName=function 4 那一个
+
+    Foo().getName(); //1  Foo的返回值是window, window.getName() 这就把全局环境下的getName输出4那个也覆盖掉了
+                     // 可以在空处输出window.getName,前面等于4后面等于1，所以说明确实是覆盖了
+
+          // window.getName();
+
+    new Foo.getName(); //2
+
+    new Foo().getName() //3  对于Foo里面的return this，没new就是window，new了就是本身自己，而自己是没有getName的，所以去原型找，所以是3
+    //
+    new new Foo().getName()//3  先new Foo() 再new这个实例,找getName 没有,找到最上面原型,3
+
+
+</script>
+
+</body>
+</html>
