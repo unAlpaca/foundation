@@ -1,6 +1,6 @@
 
 
-var scope = "global scope"; 
+var scope = "global scope";
 function checkScope() {
     var scope = "local scope";
     function f() {
@@ -9,12 +9,14 @@ function checkScope() {
     return f();
 }
 
+console.log(checkScope()());
+
 //这里返回local scope
 
 
 
 
-var scope = "global scope"; 
+var scope = "global scope";
 function checkScope() {
     var scope = "local scope";
     function f() {

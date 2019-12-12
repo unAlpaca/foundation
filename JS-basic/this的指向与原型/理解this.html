@@ -1,4 +1,4 @@
-r<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,10 +14,10 @@ r<!DOCTYPE html>
         a:20,
         b:20,
         getName:function() {
-            console.log(this.a + this.b);
+            console.log(this.a,this.b);
             console.log("1" + this.name);
             return function () {
-                console.log(this.a + this.b);
+                console.log(this.a,this.b);
                 console.log("2" + this.name);
             }
         }
