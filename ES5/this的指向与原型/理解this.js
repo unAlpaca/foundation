@@ -1,7 +1,7 @@
 function foo(num){
     console.log("foo:" + num);
 
-    this.count++;
+    this.count =;
     console.log(this,'1')
 }
 
