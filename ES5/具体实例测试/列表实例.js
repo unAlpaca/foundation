@@ -85,7 +85,7 @@ A.find('子元素1');
 // console.log(A);
 
 A.insert('子元素2',1);
-// console.log(A);
+console.log(A.find('子元素5'));
 
 // A.delete('子元素1')
 // console.log(A);

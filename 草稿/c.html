@@ -7,19 +7,40 @@
 </head>
 
 <body>
-    <script>
-    function test() {
-        console.log('test');
-        return true
+<script>
+    async function async1() {
+        await async2();
+        console.log(1)
     }
 
-    function test2() {
-        var test = test()
-        console.log(test)
+    function async2() {
+        console.log(2);
+        return new Promise(resolve => {
+            console.log('a');
+            resolve();
+            console.log('b');
+        }).then(() => {
+            console.log('c')
+        })
     }
 
-    test2()
-    </script>
+    setTimeout(() => console.log(3));
+
+    async1();
+
+    new Promise(resolve => {
+        console.log(4);
+        resolve();
+        console.log(5);
+    }).then(() => {
+        console.log(6)
+    });
+
+    console.log(7)
+
+
+    // 2
+</script>
 </body>
 
 </html>
