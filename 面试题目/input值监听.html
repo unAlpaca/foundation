@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="myInput">
+</body>
+<script>
+    let input = document.getElementById('myInput');
+    input.addEventListener('change',function(){
+        console.log('触发change事件');
+    })
+    input.addEventListener('input',function(){
+        console.log('触发input事件');
+    })
+    input.addEventListener('keydown',function(){
+        console.log('触发keydown事件');
+        console.log(input.value);
+    })
+    input.addEventListener('keypress',function(){
+        console.log('触发keypress事件');
+        console.log(input.value);
+    })
+    input.addEventListener('keyup',function(){
+        console.log('触发keyup事件');
+        console.log(input.value);
+    })
+    // input.addEventListener('focus',function(){
+    //     console.log(2);
+    // })
+</script>
+</html>
