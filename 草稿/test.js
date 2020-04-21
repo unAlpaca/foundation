@@ -1,19 +1,40 @@
-var twoSum = function(nums, target) {
-    let mapArr = new Map();
-    for(let i = 0;i<nums.length;i++){
-        let subtruct = target - nums[i];
-        if(mapArr.has(subtruct)){
-            return [mapArr.get(subtruct),i]
+function lengthOfLongestSubstring(str){
+    //定义2个指针来找到字符串的左右边界。
+    let left_pointer = 0;
+    let right_pointer = 0;
+
+    //定义最大长度
+    let maxLength = 0;
+
+    //定义一个临时储存的结果,用来判断指针是否移动
+    let tempStr = [];
+
+
+    for(;right_pointer<str.length;right_pointer++){
+        
+        if(tempStr.indexOf(str[right_pointer] != -1)){
+
+            do{
+                tempStr.shift();
+                console.log(tempStr[0]);
+                
+                left_pointer++
+            }while(tempStr.has(str[right_pointer]))
+        console.log(tempStr.has([right_pointer]));
+
+
         }else{
-            mapArr.set(nums[i],i)
-        }
-    console.log(mapArr)
-
+            tempStr.add(str[right_pointer]);
+            tempStr.size > maxLength && (maxLength = tempStr.size)
+        }   
     }
-    console.log()
-};
 
-let arr = [2,11,12,7]
-let target = 9;
-console.log(twoSum(arr,target));
-    
+    return maxLength
+
+}
+
+let arr = 'abcabcbb'
+let arr1 = 'peeke'
+
+ 
+ console.log(lengthOfLongestSubstring(arr1));
