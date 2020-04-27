@@ -18,7 +18,7 @@ var threeSum = function(nums) {
     nums.sort((a,b)=>(a-b))
 
     //遍历
-    for(let i = 0; i<nums.length-2;i++){
+    for(let i = 0; i<=nums.length-2;i++){
 
         //进行计算 的 判断条件：
         //1.它是第一个元素 
@@ -34,7 +34,7 @@ var threeSum = function(nums) {
                 if(nums[i] + nums[start] + nums[end] === 0){
 
                     //保存结果
-                    res.push(nums[i],nums[start],nums[end])
+                    res.push([nums[i],nums[start],nums[end]])
                     //缩小范围，继续寻找
                     start++;
                     end--;
@@ -47,12 +47,19 @@ var threeSum = function(nums) {
                         end--
                     }
 
-                }else{
+                    //如果小于0,说明start值不够，因为排过序的end值是最大的，只能调整start，减小end只能更小
+                }else if((nums[i] + nums[start] + nums[end] < 0)){
                     start++
+
+                     //如果大于0,说明end值太大了，因为排过序的end值是最大的，只能调整end值减小来适应，增加start只会更大
+                }else{
+                    end--
                 }
             }
         }
     }
+
+    return res
 };
 // @lc code=end
 
