@@ -13,7 +13,7 @@ var merge = function(intervals) {
 
     if(intervals.length < 2) return intervals;
 
-    intervals.sort((a,b)=>(a[0]!=b[0]?a[0]-b[0]:a[1]-b[1]))
+    intervals.sort((a,b)=>(a[0]-b[0]))
     
     //定义2个变量，第一个是curr一个是正再操作的变量，
     let curr = intervals[0];
@@ -23,7 +23,7 @@ var merge = function(intervals) {
         //如果当前的终止位置大于操作的起始位置，可以合并
         if(curr[1] >= interval[0]){
             //合并，取2者终止位置大的
-            curr[1] = Math.max(curr[1],intervals[1])
+            curr[1] = Math.max(curr[1],interval[1])
         }else{
 
             //小于就记录，重启第二个区间
