@@ -9,20 +9,26 @@
 </head>
 
 <body>
-    <div class="version">Copyright © 2012-2020 zaojiance湖南早检测教育咨询有限公司
-        <textarea cols="20" rows="10" id="biao1" style="color: black" value="zzzz">用户定义的代码区域</textarea>
-        <input type="button" onClick="copyUrl2()" value="点击复制代码" />
-        <textarea type="text" style="color: black" value="ttttt"></textarea>
-    </div>
+    
     
     <script type="text/javascript">
-    function copyUrl2()
-    {
-        var Url2=document.getElementById("biao1");
-        Url2.select(); // 选择对象
-        document.execCommand("Copy"); // 执行浏览器复制命令
-        alert("已复制好，可贴粘。");
+    var a = 'xxx1'
+
+function f1() {
+    console.log(this);
+    console.log(this.a);
+}
+var obj = {
+    a: "xxx2",
+    m2:function(fn){
+        fn && fn.call()
+        return function() {
+            return fn;
+        }
     }
+}
+// console.log(obj.m2(f1)());
+f1()
 </script>
 </body>
 
