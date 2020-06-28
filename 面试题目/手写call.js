@@ -10,7 +10,7 @@
         let type = typeof context;
         if(!/^(object|function)$/.test(type)){
 
-            if((/^(symbol|bigint)$/.test(type)){
+            if((/^(symbol|bigint)$/.test(type))){
                 context = Object(context)
             }else{
                 context = new context.constructor(context)
