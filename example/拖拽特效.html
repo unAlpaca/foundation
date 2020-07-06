@@ -1,52 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
 
-        #div1 {
-            width: 200px;
-            height: 200px;
-            background: black;
-            position: absolute;
-        }
-        #div2 {
-            width: 100px;
-            height: 100px;
-            background: green;
-            position: absolute;
-
-        }
+      #div1 {
+        width: 200px;
+        height: 200px;
+        background: black;
+        position: absolute;
+      }
+      #div2 {
+        width: 100px;
+        height: 100px;
+        background: green;
+        position: absolute;
+      }
     </style>
-</head>
-<body>
-<div id="div1"></div>
-<div id="div2"></div>
+  </head>
+  <body>
+    <div id="div1"></div>
+    <div id="div2"></div>
 
-<script>
-    var div1 = document.getElementById('div1');
-    div1.addEventListener('mousedown',function (e) {
+    <script>
+      var div1 = document.getElementById("div1");
+      div1.addEventListener("mousedown", function (e) {
         var ev = e || event;
         var l = ev.clientX - this.offsetLeft;
         var t = ev.clientY - this.offsetTop;
         console.log(this);
         document.onmousemove = function (e) {
-            var ev = e || event;
-            this.style.left = ev.clientX - l + 'px';
-            this.style.top = ev.clientY - t + 'px';
-
+          var ev = e || event;
+          this.style.left = ev.clientX - l + "px";
+          this.style.top = ev.clientY - t + "px";
         }.bind(this);
         document.onmouseup = function () {
-            this.onmousemove = this.onmouseup = null;
+          this.onmousemove = this.onmouseup = null;
+        };
+        return false;
+      });
+    </script>
+    <script>
+      var kidsWithCandies = function (candies, extraCandies) {
+        let max = candies[0 ];
+        for (let i = 0; i < candies.length - 1; i++) {
+          max = Math.max(candies[i], max);
         }
-        return false
-    })
-</script>
-</body>
+
+        let res = [];
+        for (let j = 0; j < candies.length - 1; j++) {
+          if (candies[j] + extraCandies >= max) {
+            res.push(true);
+          } else {
+            res.push(false);
+          }
+        }
+
+        return res;
+      };
+      console.log(kidsWithCandies([2,3,5,1,3],3));
+         
+    </script>
+  </body>
 </html>
