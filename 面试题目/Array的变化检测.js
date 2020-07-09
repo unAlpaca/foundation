@@ -9,7 +9,7 @@ console.log(JSON.parse(arrayMethods));
 	Object.defineProperty(arrayMethods,method,{
 		value:function mutator(...args){
 			console.log(1111)
-			return original.apply(this,args)
+			return original.apply(this,...args)
 		},
 		enumerarble:false,
 		writable:true,
@@ -17,5 +17,6 @@ console.log(JSON.parse(arrayMethods));
 	})
 });
 
-['1','2'].__proto__ = arrayMethods
-console.log(['1','2']._)
+// var a = ['1','2']
+// a.__proto__ = arrayMethods
+// a.push('3')
