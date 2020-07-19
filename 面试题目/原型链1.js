@@ -33,3 +33,4 @@ let sanmao = _new(Dog,'三毛');
 sanmao.bark(); //'wangwang
 sanmao.sayName()  //'myName 三毛'
 console.log(sanmao instanceof Dog); //true
+

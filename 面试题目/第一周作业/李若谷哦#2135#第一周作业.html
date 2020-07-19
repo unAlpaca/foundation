@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第一周作业</title>
+    <style>
+      .hljs {
+        display: block;
+        overflow-x: auto;
+        padding: 0.5em;
+        background: #23241f;
+      }
+      .hljs,
+      .hljs-tag,
+      .hljs-subst {
+        color: #f8f8f2;
+      }
+      .hljs-strong,
+      .hljs-emphasis {
+        color: #a8a8a2;
+      }
+      .hljs-bullet,
+      .hljs-quote,
+      .hljs-number,
+      .hljs-regexp,
+      .hljs-literal,
+      .hljs-link {
+        color: #ae81ff;
+      }
+      .hljs-code,
+      .hljs-title,
+      .hljs-section,
+      .hljs-selector-class {
+        color: #a6e22e;
+      }
+      .hljs-strong {
+        font-weight: bold;
+      }
+      .hljs-emphasis {
+        font-style: italic;
+      }
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-name,
+      .hljs-attr {
+        color: #f92672;
+      }
+      .hljs-symbol,
+      .hljs-attribute {
+        color: #66d9ef;
+      }
+      .hljs-params,
+      .hljs-class .hljs-title {
+        color: #f8f8f2;
+      }
+      .hljs-string,
+      .hljs-type,
+      .hljs-built_in,
+      .hljs-builtin-name,
+      .hljs-selector-id,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-addition,
+      .hljs-variable,
+      .hljs-template-variable {
+        color: #e6db74;
+      }
+      .hljs-comment,
+      .hljs-deletion,
+      .hljs-meta {
+        color: #75715e;
+      }
+    </style>
+    <script>
+      /*
+  Highlight.js 10.1.1 (93fd0d73)
+  License: BSD-3-Clause
+  Copyright (c) 2006-2020, Ivan Sagalaev
+*/
+      var hljs = (function () {
+        "use strict";
+        function e(n) {
+          Object.freeze(n);
+          var t = "function" == typeof n;
+          return (
+            Object.getOwnPropertyNames(n).forEach(function (r) {
+              !Object.hasOwnProperty.call(n, r) ||
+                null === n[r] ||
+                ("object" != typeof n[r] && "function" != typeof n[r]) ||
+                (t &&
+                  ("caller" === r || "callee" === r || "arguments" === r)) ||
+                Object.isFrozen(n[r]) ||
+                e(n[r]);
+            }),
+            n
+          );
+        }
+        class n {
+          constructor(e) {
+            void 0 === e.data && (e.data = {}), (this.data = e.data);
+          }
+          ignoreMatch() {
+            this.ignore = !0;
+          }
+        }
+        function t(e) {
+          return e
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#x27;");
+        }
+        function r(e, ...n) {
+          var t = {};
+          for (const n in e) t[n] = e[n];
+          return (
+            n.forEach(function (e) {
+              for (const n in e) t[n] = e[n];
+            }),
+            t
+          );
+        }
+        function a(e) {
+          return e.nodeName.toLowerCase();
+        }
+        var i = Object.freeze({
+          __proto__: null,
+          escapeHTML: t,
+          inherit: r,
+          nodeStream: function (e) {
+            var n = [];
+            return (
+              (function e(t, r) {
+                for (var i = t.firstChild; i; i = i.nextSibling)
+                  3 === i.nodeType
+                    ? (r += i.nodeValue.length)
+                    : 1 === i.nodeType &&
+                      (n.push({ event: "start", offset: r, node: i }),
+                      (r = e(i, r)),
+                      a(i).match(/br|hr|img|input/) ||
+                        n.push({ event: "stop", offset: r, node: i }));
+                return r;
+              })(e, 0),
+              n
+            );
+          },
+          mergeStreams: function (e, n, r) {
+            var i = 0,
+              s = "",
+              o = [];
+            function l() {
+              return e.length && n.length
+                ? e[0].offset !== n[0].offset
+                  ? e[0].offset < n[0].offset
+                    ? e
+                    : n
+                  : "start" === n[0].event
+                  ? e
+                  : n
+                : e.length
+                ? e
+                : n;
+            }
+            function c(e) {
+              s +=
+                "<" +
+                a(e) +
+                [].map
+                  .call(e.attributes, function (e) {
+                    return " " + e.nodeName + '="' + t(e.value) + '"';
+                  })
+                  .join("") +
+                ">";
+            }
+            function u(e) {
+              s += "</" + a(e) + ">";
+            }
+            function d(e) {
+              ("start" === e.event ? c : u)(e.node);
+            }
+            for (; e.length || n.length; ) {
+              var g = l();
+              if (
+                ((s += t(r.substring(i, g[0].offset))),
+                (i = g[0].offset),
+                g === e)
+              ) {
+                o.reverse().forEach(u);
+                do {
+                  d(g.splice(0, 1)[0]), (g = l());
+                } while (g === e && g.length && g[0].offset === i);
+                o.reverse().forEach(c);
+              } else
+                "start" === g[0].event ? o.push(g[0].node) : o.pop(),
+                  d(g.splice(0, 1)[0]);
+            }
+            return s + t(r.substr(i));
+          },
+        });
+        const s = "</span>",
+          o = (e) => !!e.kind;
+        class l {
+          constructor(e, n) {
+            (this.buffer = ""),
+              (this.classPrefix = n.classPrefix),
+              e.walk(this);
+          }
+          addText(e) {
+            this.buffer += t(e);
+          }
+          openNode(e) {
+            if (!o(e)) return;
+            let n = e.kind;
+            e.sublanguage || (n = `${this.classPrefix}${n}`), this.span(n);
+          }
+          closeNode(e) {
+            o(e) && (this.buffer += s);
+          }
+          value() {
+            return this.buffer;
+          }
+          span(e) {
+            this.buffer += `<span class="${e}">`;
+          }
+        }
+        class c {
+          constructor() {
+            (this.rootNode = { children: [] }), (this.stack = [this.rootNode]);
+          }
+          get top() {
+            return this.stack[this.stack.length - 1];
+          }
+          get root() {
+            return this.rootNode;
+          }
+          add(e) {
+            this.top.children.push(e);
+          }
+          openNode(e) {
+            const n = { kind: e, children: [] };
+            this.add(n), this.stack.push(n);
+          }
+          closeNode() {
+            if (this.stack.length > 1) return this.stack.pop();
+          }
+          closeAllNodes() {
+            for (; this.closeNode(); );
+          }
+          toJSON() {
+            return JSON.stringify(this.rootNode, null, 4);
+          }
+          walk(e) {
+            return this.constructor._walk(e, this.rootNode);
+          }
+          static _walk(e, n) {
+            return (
+              "string" == typeof n
+                ? e.addText(n)
+                : n.children &&
+                  (e.openNode(n),
+                  n.children.forEach((n) => this._walk(e, n)),
+                  e.closeNode(n)),
+              e
+            );
+          }
+          static _collapse(e) {
+            "string" != typeof e &&
+              e.children &&
+              (e.children.every((e) => "string" == typeof e)
+                ? (e.children = [e.children.join("")])
+                : e.children.forEach((e) => {
+                    c._collapse(e);
+                  }));
+          }
+        }
+        class u extends c {
+          constructor(e) {
+            super(), (this.options = e);
+          }
+          addKeyword(e, n) {
+            "" !== e && (this.openNode(n), this.addText(e), this.closeNode());
+          }
+          addText(e) {
+            "" !== e && this.add(e);
+          }
+          addSublanguage(e, n) {
+            const t = e.root;
+            (t.kind = n), (t.sublanguage = !0), this.add(t);
+          }
+          toHTML() {
+            return new l(this, this.options).value();
+          }
+          finalize() {
+            return !0;
+          }
+        }
+        function d(e) {
+          return e ? ("string" == typeof e ? e : e.source) : null;
+        }
+        const g =
+            "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)",
+          h = { begin: "\\\\[\\s\\S]", relevance: 0 },
+          f = {
+            className: "string",
+            begin: "'",
+            end: "'",
+            illegal: "\\n",
+            contains: [h],
+          },
+          p = {
+            className: "string",
+            begin: '"',
+            end: '"',
+            illegal: "\\n",
+            contains: [h],
+          },
+          b = {
+            begin: /\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|they|like|more)\b/,
+          },
+          m = function (e, n, t = {}) {
+            var a = r(
+              { className: "comment", begin: e, end: n, contains: [] },
+              t
+            );
+            return (
+              a.contains.push(b),
+              a.contains.push({
+                className: "doctag",
+                begin: "(?:TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):",
+                relevance: 0,
+              }),
+              a
+            );
+          },
+          v = m("//", "$"),
+          x = m("/\\*", "\\*/"),
+          E = m("#", "$");
+        var _ = Object.freeze({
+            __proto__: null,
+            IDENT_RE: "[a-zA-Z]\\w*",
+            UNDERSCORE_IDENT_RE: "[a-zA-Z_]\\w*",
+            NUMBER_RE: "\\b\\d+(\\.\\d+)?",
+            C_NUMBER_RE: g,
+            BINARY_NUMBER_RE: "\\b(0b[01]+)",
+            RE_STARTERS_RE:
+              "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~",
+            SHEBANG: (e = {}) => {
+              const n = /^#![ ]*\//;
+              return (
+                e.binary &&
+                  (e.begin = (function (...e) {
+                    return e.map((e) => d(e)).join("");
+                  })(n, /.*\b/, e.binary, /\b.*/)),
+                r(
+                  {
+                    className: "meta",
+                    begin: n,
+                    end: /$/,
+                    relevance: 0,
+                    "on:begin": (e, n) => {
+                      0 !== e.index && n.ignoreMatch();
+                    },
+                  },
+                  e
+                )
+              );
+            },
+            BACKSLASH_ESCAPE: h,
+            APOS_STRING_MODE: f,
+            QUOTE_STRING_MODE: p,
+            PHRASAL_WORDS_MODE: b,
+            COMMENT: m,
+            C_LINE_COMMENT_MODE: v,
+            C_BLOCK_COMMENT_MODE: x,
+            HASH_COMMENT_MODE: E,
+            NUMBER_MODE: {
+              className: "number",
+              begin: "\\b\\d+(\\.\\d+)?",
+              relevance: 0,
+            },
+            C_NUMBER_MODE: { className: "number", begin: g, relevance: 0 },
+            BINARY_NUMBER_MODE: {
+              className: "number",
+              begin: "\\b(0b[01]+)",
+              relevance: 0,
+            },
+            CSS_NUMBER_MODE: {
+              className: "number",
+              begin:
+                "\\b\\d+(\\.\\d+)?(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
+              relevance: 0,
+            },
+            REGEXP_MODE: {
+              begin: /(?=\/[^/\n]*\/)/,
+              contains: [
+                {
+                  className: "regexp",
+                  begin: /\//,
+                  end: /\/[gimuy]*/,
+                  illegal: /\n/,
+                  contains: [
+                    h,
+                    { begin: /\[/, end: /\]/, relevance: 0, contains: [h] },
+                  ],
+                },
+              ],
+            },
+            TITLE_MODE: {
+              className: "title",
+              begin: "[a-zA-Z]\\w*",
+              relevance: 0,
+            },
+            UNDERSCORE_TITLE_MODE: {
+              className: "title",
+              begin: "[a-zA-Z_]\\w*",
+              relevance: 0,
+            },
+            METHOD_GUARD: { begin: "\\.\\s*[a-zA-Z_]\\w*", relevance: 0 },
+            END_SAME_AS_BEGIN: function (e) {
+              return Object.assign(e, {
+                "on:begin": (e, n) => {
+                  n.data._beginMatch = e[1];
+                },
+                "on:end": (e, n) => {
+                  n.data._beginMatch !== e[1] && n.ignoreMatch();
+                },
+              });
+            },
+          }),
+          N = "of and for in not or if then".split(" ");
+        function w(e, n) {
+          return n
+            ? +n
+            : (function (e) {
+                return N.includes(e.toLowerCase());
+              })(e)
+            ? 0
+            : 1;
+        }
+        const R = t,
+          y = r,
+          { nodeStream: k, mergeStreams: O } = i,
+          M = Symbol("nomatch");
+        return (function (t) {
+          var a = [],
+            i = {},
+            s = {},
+            o = [],
+            l = !0,
+            c = /(^(<[^>]+>|\t|)+|\n)/gm,
+            g =
+              "Could not find the language '{}', did you forget to load/include a language module?";
+          const h = { disableAutodetect: !0, name: "Plain text", contains: [] };
+          var f = {
+            noHighlightRe: /^(no-?highlight)$/i,
+            languageDetectRe: /\blang(?:uage)?-([\w-]+)\b/i,
+            classPrefix: "hljs-",
+            tabReplace: null,
+            useBR: !1,
+            languages: null,
+            __emitter: u,
+          };
+          function p(e) {
+            return f.noHighlightRe.test(e);
+          }
+          function b(e, n, t, r) {
+            var a = { code: n, language: e };
+            S("before:highlight", a);
+            var i = a.result ? a.result : m(a.language, a.code, t, r);
+            return (i.code = a.code), S("after:highlight", i), i;
+          }
+          function m(e, t, a, s) {
+            var o = t;
+            function c(e, n) {
+              var t = E.case_insensitive ? n[0].toLowerCase() : n[0];
+              return (
+                Object.prototype.hasOwnProperty.call(e.keywords, t) &&
+                e.keywords[t]
+              );
+            }
+            function u() {
+              null != y.subLanguage
+                ? (function () {
+                    if ("" !== A) {
+                      var e = null;
+                      if ("string" == typeof y.subLanguage) {
+                        if (!i[y.subLanguage]) return void O.addText(A);
+                        (e = m(y.subLanguage, A, !0, k[y.subLanguage])),
+                          (k[y.subLanguage] = e.top);
+                      } else
+                        e = v(A, y.subLanguage.length ? y.subLanguage : null);
+                      y.relevance > 0 && (I += e.relevance),
+                        O.addSublanguage(e.emitter, e.language);
+                    }
+                  })()
+                : (function () {
+                    if (!y.keywords) return void O.addText(A);
+                    let e = 0;
+                    y.keywordPatternRe.lastIndex = 0;
+                    let n = y.keywordPatternRe.exec(A),
+                      t = "";
+                    for (; n; ) {
+                      t += A.substring(e, n.index);
+                      const r = c(y, n);
+                      if (r) {
+                        const [e, a] = r;
+                        O.addText(t), (t = ""), (I += a), O.addKeyword(n[0], e);
+                      } else t += n[0];
+                      (e = y.keywordPatternRe.lastIndex),
+                        (n = y.keywordPatternRe.exec(A));
+                    }
+                    (t += A.substr(e)), O.addText(t);
+                  })(),
+                (A = "");
+            }
+            function h(e) {
+              return (
+                e.className && O.openNode(e.className),
+                (y = Object.create(e, { parent: { value: y } }))
+              );
+            }
+            function p(e) {
+              return 0 === y.matcher.regexIndex
+                ? ((A += e[0]), 1)
+                : ((L = !0), 0);
+            }
+            var b = {};
+            function x(t, r) {
+              var i = r && r[0];
+              if (((A += t), null == i)) return u(), 0;
+              if (
+                "begin" === b.type &&
+                "end" === r.type &&
+                b.index === r.index &&
+                "" === i
+              ) {
+                if (((A += o.slice(r.index, r.index + 1)), !l)) {
+                  const n = Error("0 width match regex");
+                  throw ((n.languageName = e), (n.badRule = b.rule), n);
+                }
+                return 1;
+              }
+              if (((b = r), "begin" === r.type))
+                return (function (e) {
+                  var t = e[0],
+                    r = e.rule;
+                  const a = new n(r),
+                    i = [r.__beforeBegin, r["on:begin"]];
+                  for (const n of i) if (n && (n(e, a), a.ignore)) return p(t);
+                  return (
+                    r &&
+                      r.endSameAsBegin &&
+                      (r.endRe = RegExp(
+                        t.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
+                        "m"
+                      )),
+                    r.skip
+                      ? (A += t)
+                      : (r.excludeBegin && (A += t),
+                        u(),
+                        r.returnBegin || r.excludeBegin || (A = t)),
+                    h(r),
+                    r.returnBegin ? 0 : t.length
+                  );
+                })(r);
+              if ("illegal" === r.type && !a) {
+                const e = Error(
+                  'Illegal lexeme "' +
+                    i +
+                    '" for mode "' +
+                    (y.className || "<unnamed>") +
+                    '"'
+                );
+                throw ((e.mode = y), e);
+              }
+              if ("end" === r.type) {
+                var s = (function (e) {
+                  var t = e[0],
+                    r = o.substr(e.index),
+                    a = (function e(t, r, a) {
+                      let i = (function (e, n) {
+                        var t = e && e.exec(n);
+                        return t && 0 === t.index;
+                      })(t.endRe, a);
+                      if (i) {
+                        if (t["on:end"]) {
+                          const e = new n(t);
+                          t["on:end"](r, e), e.ignore && (i = !1);
+                        }
+                        if (i) {
+                          for (; t.endsParent && t.parent; ) t = t.parent;
+                          return t;
+                        }
+                      }
+                      if (t.endsWithParent) return e(t.parent, r, a);
+                    })(y, e, r);
+                  if (!a) return M;
+                  var i = y;
+                  i.skip
+                    ? (A += t)
+                    : (i.returnEnd || i.excludeEnd || (A += t),
+                      u(),
+                      i.excludeEnd && (A = t));
+                  do {
+                    y.className && O.closeNode(),
+                      y.skip || y.subLanguage || (I += y.relevance),
+                      (y = y.parent);
+                  } while (y !== a.parent);
+                  return (
+                    a.starts &&
+                      (a.endSameAsBegin && (a.starts.endRe = a.endRe),
+                      h(a.starts)),
+                    i.returnEnd ? 0 : t.length
+                  );
+                })(r);
+                if (s !== M) return s;
+              }
+              if ("illegal" === r.type && "" === i) return 1;
+              if (B > 1e5 && B > 3 * r.index)
+                throw Error(
+                  "potential infinite loop, way more iterations than matches"
+                );
+              return (A += i), i.length;
+            }
+            var E = T(e);
+            if (!E)
+              throw (
+                (console.error(g.replace("{}", e)),
+                Error('Unknown language: "' + e + '"'))
+              );
+            var _ = (function (e) {
+                function n(n, t) {
+                  return RegExp(
+                    d(n),
+                    "m" + (e.case_insensitive ? "i" : "") + (t ? "g" : "")
+                  );
+                }
+                class t {
+                  constructor() {
+                    (this.matchIndexes = {}),
+                      (this.regexes = []),
+                      (this.matchAt = 1),
+                      (this.position = 0);
+                  }
+                  addRule(e, n) {
+                    (n.position = this.position++),
+                      (this.matchIndexes[this.matchAt] = n),
+                      this.regexes.push([n, e]),
+                      (this.matchAt +=
+                        (function (e) {
+                          return RegExp(e.toString() + "|").exec("").length - 1;
+                        })(e) + 1);
+                  }
+                  compile() {
+                    0 === this.regexes.length && (this.exec = () => null);
+                    const e = this.regexes.map((e) => e[1]);
+                    (this.matcherRe = n(
+                      (function (e, n = "|") {
+                        for (
+                          var t = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./,
+                            r = 0,
+                            a = "",
+                            i = 0;
+                          i < e.length;
+                          i++
+                        ) {
+                          var s = (r += 1),
+                            o = d(e[i]);
+                          for (i > 0 && (a += n), a += "("; o.length > 0; ) {
+                            var l = t.exec(o);
+                            if (null == l) {
+                              a += o;
+                              break;
+                            }
+                            (a += o.substring(0, l.index)),
+                              (o = o.substring(l.index + l[0].length)),
+                              "\\" === l[0][0] && l[1]
+                                ? (a += "\\" + (+l[1] + s))
+                                : ((a += l[0]), "(" === l[0] && r++);
+                          }
+                          a += ")";
+                        }
+                        return a;
+                      })(e),
+                      !0
+                    )),
+                      (this.lastIndex = 0);
+                  }
+                  exec(e) {
+                    this.matcherRe.lastIndex = this.lastIndex;
+                    const n = this.matcherRe.exec(e);
+                    if (!n) return null;
+                    const t = n.findIndex((e, n) => n > 0 && void 0 !== e),
+                      r = this.matchIndexes[t];
+                    return n.splice(0, t), Object.assign(n, r);
+                  }
+                }
+                class a {
+                  constructor() {
+                    (this.rules = []),
+                      (this.multiRegexes = []),
+                      (this.count = 0),
+                      (this.lastIndex = 0),
+                      (this.regexIndex = 0);
+                  }
+                  getMatcher(e) {
+                    if (this.multiRegexes[e]) return this.multiRegexes[e];
+                    const n = new t();
+                    return (
+                      this.rules.slice(e).forEach(([e, t]) => n.addRule(e, t)),
+                      n.compile(),
+                      (this.multiRegexes[e] = n),
+                      n
+                    );
+                  }
+                  considerAll() {
+                    this.regexIndex = 0;
+                  }
+                  addRule(e, n) {
+                    this.rules.push([e, n]), "begin" === n.type && this.count++;
+                  }
+                  exec(e) {
+                    const n = this.getMatcher(this.regexIndex);
+                    n.lastIndex = this.lastIndex;
+                    const t = n.exec(e);
+                    return (
+                      t &&
+                        ((this.regexIndex += t.position + 1),
+                        this.regexIndex === this.count &&
+                          (this.regexIndex = 0)),
+                      t
+                    );
+                  }
+                }
+                function i(e, n) {
+                  const t = e.input[e.index - 1],
+                    r = e.input[e.index + e[0].length];
+                  ("." !== t && "." !== r) || n.ignoreMatch();
+                }
+                if (e.contains && e.contains.includes("self"))
+                  throw Error(
+                    "ERR: contains `self` is not supported at the top-level of a language.  See documentation."
+                  );
+                return (function t(s, o) {
+                  const l = s;
+                  if (s.compiled) return l;
+                  (s.compiled = !0),
+                    (s.__beforeBegin = null),
+                    (s.keywords = s.keywords || s.beginKeywords);
+                  let c = null;
+                  if (
+                    ("object" == typeof s.keywords &&
+                      ((c = s.keywords.$pattern), delete s.keywords.$pattern),
+                    s.keywords &&
+                      (s.keywords = (function (e, n) {
+                        var t = {};
+                        return (
+                          "string" == typeof e
+                            ? r("keyword", e)
+                            : Object.keys(e).forEach(function (n) {
+                                r(n, e[n]);
+                              }),
+                          t
+                        );
+                        function r(e, r) {
+                          n && (r = r.toLowerCase()),
+                            r.split(" ").forEach(function (n) {
+                              var r = n.split("|");
+                              t[r[0]] = [e, w(r[0], r[1])];
+                            });
+                        }
+                      })(s.keywords, e.case_insensitive)),
+                    s.lexemes && c)
+                  )
+                    throw Error(
+                      "ERR: Prefer `keywords.$pattern` to `mode.lexemes`, BOTH are not allowed. (see mode reference) "
+                    );
+                  return (
+                    (l.keywordPatternRe = n(s.lexemes || c || /\w+/, !0)),
+                    o &&
+                      (s.beginKeywords &&
+                        ((s.begin =
+                          "\\b(" +
+                          s.beginKeywords.split(" ").join("|") +
+                          ")(?=\\b|\\s)"),
+                        (s.__beforeBegin = i)),
+                      s.begin || (s.begin = /\B|\b/),
+                      (l.beginRe = n(s.begin)),
+                      s.endSameAsBegin && (s.end = s.begin),
+                      s.end || s.endsWithParent || (s.end = /\B|\b/),
+                      s.end && (l.endRe = n(s.end)),
+                      (l.terminator_end = d(s.end) || ""),
+                      s.endsWithParent &&
+                        o.terminator_end &&
+                        (l.terminator_end +=
+                          (s.end ? "|" : "") + o.terminator_end)),
+                    s.illegal && (l.illegalRe = n(s.illegal)),
+                    void 0 === s.relevance && (s.relevance = 1),
+                    s.contains || (s.contains = []),
+                    (s.contains = [].concat(
+                      ...s.contains.map(function (e) {
+                        return (function (e) {
+                          return (
+                            e.variants &&
+                              !e.cached_variants &&
+                              (e.cached_variants = e.variants.map(function (n) {
+                                return r(e, { variants: null }, n);
+                              })),
+                            e.cached_variants
+                              ? e.cached_variants
+                              : (function e(n) {
+                                  return (
+                                    !!n && (n.endsWithParent || e(n.starts))
+                                  );
+                                })(e)
+                              ? r(e, { starts: e.starts ? r(e.starts) : null })
+                              : Object.isFrozen(e)
+                              ? r(e)
+                              : e
+                          );
+                        })("self" === e ? s : e);
+                      })
+                    )),
+                    s.contains.forEach(function (e) {
+                      t(e, l);
+                    }),
+                    s.starts && t(s.starts, o),
+                    (l.matcher = (function (e) {
+                      const n = new a();
+                      return (
+                        e.contains.forEach((e) =>
+                          n.addRule(e.begin, { rule: e, type: "begin" })
+                        ),
+                        e.terminator_end &&
+                          n.addRule(e.terminator_end, { type: "end" }),
+                        e.illegal && n.addRule(e.illegal, { type: "illegal" }),
+                        n
+                      );
+                    })(l)),
+                    l
+                  );
+                })(e);
+              })(E),
+              N = "",
+              y = s || _,
+              k = {},
+              O = new f.__emitter(f);
+            !(function () {
+              for (var e = [], n = y; n !== E; n = n.parent)
+                n.className && e.unshift(n.className);
+              e.forEach((e) => O.openNode(e));
+            })();
+            var A = "",
+              I = 0,
+              S = 0,
+              B = 0,
+              L = !1;
+            try {
+              for (y.matcher.considerAll(); ; ) {
+                B++,
+                  L
+                    ? (L = !1)
+                    : ((y.matcher.lastIndex = S), y.matcher.considerAll());
+                const e = y.matcher.exec(o);
+                if (!e) break;
+                const n = x(o.substring(S, e.index), e);
+                S = e.index + n;
+              }
+              return (
+                x(o.substr(S)),
+                O.closeAllNodes(),
+                O.finalize(),
+                (N = O.toHTML()),
+                {
+                  relevance: I,
+                  value: N,
+                  language: e,
+                  illegal: !1,
+                  emitter: O,
+                  top: y,
+                }
+              );
+            } catch (n) {
+              if (n.message && n.message.includes("Illegal"))
+                return {
+                  illegal: !0,
+                  illegalBy: {
+                    msg: n.message,
+                    context: o.slice(S - 100, S + 100),
+                    mode: n.mode,
+                  },
+                  sofar: N,
+                  relevance: 0,
+                  value: R(o),
+                  emitter: O,
+                };
+              if (l)
+                return {
+                  illegal: !1,
+                  relevance: 0,
+                  value: R(o),
+                  emitter: O,
+                  language: e,
+                  top: y,
+                  errorRaised: n,
+                };
+              throw n;
+            }
+          }
+          function v(e, n) {
+            n = n || f.languages || Object.keys(i);
+            var t = (function (e) {
+                const n = {
+                  relevance: 0,
+                  emitter: new f.__emitter(f),
+                  value: R(e),
+                  illegal: !1,
+                  top: h,
+                };
+                return n.emitter.addText(e), n;
+              })(e),
+              r = t;
+            return (
+              n
+                .filter(T)
+                .filter(I)
+                .forEach(function (n) {
+                  var a = m(n, e, !1);
+                  (a.language = n),
+                    a.relevance > r.relevance && (r = a),
+                    a.relevance > t.relevance && ((r = t), (t = a));
+                }),
+              r.language && (t.second_best = r),
+              t
+            );
+          }
+          function x(e) {
+            return f.tabReplace || f.useBR
+              ? e.replace(c, (e) =>
+                  "\n" === e
+                    ? f.useBR
+                      ? "<br>"
+                      : e
+                    : f.tabReplace
+                    ? e.replace(/\t/g, f.tabReplace)
+                    : e
+                )
+              : e;
+          }
+          function E(e) {
+            let n = null;
+            const t = (function (e) {
+              var n = e.className + " ";
+              n += e.parentNode ? e.parentNode.className : "";
+              const t = f.languageDetectRe.exec(n);
+              if (t) {
+                var r = T(t[1]);
+                return (
+                  r ||
+                    (console.warn(g.replace("{}", t[1])),
+                    console.warn(
+                      "Falling back to no-highlight mode for this block.",
+                      e
+                    )),
+                  r ? t[1] : "no-highlight"
+                );
+              }
+              return n.split(/\s+/).find((e) => p(e) || T(e));
+            })(e);
+            if (p(t)) return;
+            S("before:highlightBlock", { block: e, language: t }),
+              f.useBR
+                ? ((n = document.createElement(
+                    "div"
+                  )).innerHTML = e.innerHTML
+                    .replace(/\n/g, "")
+                    .replace(/<br[ /]*>/g, "\n"))
+                : (n = e);
+            const r = n.textContent,
+              a = t ? b(t, r, !0) : v(r),
+              i = k(n);
+            if (i.length) {
+              const e = document.createElement("div");
+              (e.innerHTML = a.value), (a.value = O(i, k(e), r));
+            }
+            (a.value = x(a.value)),
+              S("after:highlightBlock", { block: e, result: a }),
+              (e.innerHTML = a.value),
+              (e.className = (function (e, n, t) {
+                var r = n ? s[n] : t,
+                  a = [e.trim()];
+                return (
+                  e.match(/\bhljs\b/) || a.push("hljs"),
+                  e.includes(r) || a.push(r),
+                  a.join(" ").trim()
+                );
+              })(e.className, t, a.language)),
+              (e.result = {
+                language: a.language,
+                re: a.relevance,
+                relavance: a.relevance,
+              }),
+              a.second_best &&
+                (e.second_best = {
+                  language: a.second_best.language,
+                  re: a.second_best.relevance,
+                  relavance: a.second_best.relevance,
+                });
+          }
+          const N = () => {
+            if (!N.called) {
+              N.called = !0;
+              var e = document.querySelectorAll("pre code");
+              a.forEach.call(e, E);
+            }
+          };
+          function T(e) {
+            return (e = (e || "").toLowerCase()), i[e] || i[s[e]];
+          }
+          function A(e, { languageName: n }) {
+            "string" == typeof e && (e = [e]),
+              e.forEach((e) => {
+                s[e] = n;
+              });
+          }
+          function I(e) {
+            var n = T(e);
+            return n && !n.disableAutodetect;
+          }
+          function S(e, n) {
+            var t = e;
+            o.forEach(function (e) {
+              e[t] && e[t](n);
+            });
+          }
+          Object.assign(t, {
+            highlight: b,
+            highlightAuto: v,
+            fixMarkup: x,
+            highlightBlock: E,
+            configure: function (e) {
+              f = y(f, e);
+            },
+            initHighlighting: N,
+            initHighlightingOnLoad: function () {
+              window.addEventListener("DOMContentLoaded", N, !1);
+            },
+            registerLanguage: function (e, n) {
+              var r = null;
+              try {
+                r = n(t);
+              } catch (n) {
+                if (
+                  (console.error(
+                    "Language definition for '{}' could not be registered.".replace(
+                      "{}",
+                      e
+                    )
+                  ),
+                  !l)
+                )
+                  throw n;
+                console.error(n), (r = h);
+              }
+              r.name || (r.name = e),
+                (i[e] = r),
+                (r.rawDefinition = n.bind(null, t)),
+                r.aliases && A(r.aliases, { languageName: e });
+            },
+            listLanguages: function () {
+              return Object.keys(i);
+            },
+            getLanguage: T,
+            registerAliases: A,
+            requireLanguage: function (e) {
+              var n = T(e);
+              if (n) return n;
+              throw Error(
+                "The '{}' language is required, but not loaded.".replace(
+                  "{}",
+                  e
+                )
+              );
+            },
+            autoDetection: I,
+            inherit: y,
+            addPlugin: function (e) {
+              o.push(e);
+            },
+          }),
+            (t.debugMode = function () {
+              l = !1;
+            }),
+            (t.safeMode = function () {
+              l = !0;
+            }),
+            (t.versionString = "10.1.1");
+          for (const n in _) "object" == typeof _[n] && e(_[n]);
+          return Object.assign(t, _), t;
+        })({});
+      })();
+      "object" == typeof exports &&
+        "undefined" != typeof module &&
+        (module.exports = hljs);
+      hljs.registerLanguage(
+        "javascript",
+        (function () {
+          "use strict";
+          const e = [
+              "as",
+              "in",
+              "of",
+              "if",
+              "for",
+              "while",
+              "finally",
+              "var",
+              "new",
+              "function",
+              "do",
+              "return",
+              "void",
+              "else",
+              "break",
+              "catch",
+              "instanceof",
+              "with",
+              "throw",
+              "case",
+              "default",
+              "try",
+              "switch",
+              "continue",
+              "typeof",
+              "delete",
+              "let",
+              "yield",
+              "const",
+              "class",
+              "debugger",
+              "async",
+              "await",
+              "static",
+              "import",
+              "from",
+              "export",
+              "extends",
+            ],
+            n = ["true", "false", "null", "undefined", "NaN", "Infinity"],
+            a = [].concat(
+              [
+                "setInterval",
+                "setTimeout",
+                "clearInterval",
+                "clearTimeout",
+                "require",
+                "exports",
+                "eval",
+                "isFinite",
+                "isNaN",
+                "parseFloat",
+                "parseInt",
+                "decodeURI",
+                "decodeURIComponent",
+                "encodeURI",
+                "encodeURIComponent",
+                "escape",
+                "unescape",
+              ],
+              [
+                "arguments",
+                "this",
+                "super",
+                "console",
+                "window",
+                "document",
+                "localStorage",
+                "module",
+                "global",
+              ],
+              [
+                "Intl",
+                "DataView",
+                "Number",
+                "Math",
+                "Date",
+                "String",
+                "RegExp",
+                "Object",
+                "Function",
+                "Boolean",
+                "Error",
+                "Symbol",
+                "Set",
+                "Map",
+                "WeakSet",
+                "WeakMap",
+                "Proxy",
+                "Reflect",
+                "JSON",
+                "Promise",
+                "Float64Array",
+                "Int16Array",
+                "Int32Array",
+                "Int8Array",
+                "Uint16Array",
+                "Uint32Array",
+                "Float32Array",
+                "Array",
+                "Uint8Array",
+                "Uint8ClampedArray",
+                "ArrayBuffer",
+              ],
+              [
+                "EvalError",
+                "InternalError",
+                "RangeError",
+                "ReferenceError",
+                "SyntaxError",
+                "TypeError",
+                "URIError",
+              ]
+            );
+          function s(e) {
+            return r("(?=", e, ")");
+          }
+          function r(...e) {
+            return e
+              .map((e) =>
+                (function (e) {
+                  return e ? ("string" == typeof e ? e : e.source) : null;
+                })(e)
+              )
+              .join("");
+          }
+          return function (t) {
+            var i = "[A-Za-z$_][0-9A-Za-z$_]*",
+              c = {
+                begin: /<[A-Za-z0-9\\._:-]+/,
+                end: /\/[A-Za-z0-9\\._:-]+>|\/>/,
+              },
+              o = {
+                $pattern: "[A-Za-z$_][0-9A-Za-z$_]*",
+                keyword: e.join(" "),
+                literal: n.join(" "),
+                built_in: a.join(" "),
+              },
+              l = {
+                className: "number",
+                variants: [
+                  { begin: "\\b(0[bB][01]+)n?" },
+                  { begin: "\\b(0[oO][0-7]+)n?" },
+                  { begin: t.C_NUMBER_RE + "n?" },
+                ],
+                relevance: 0,
+              },
+              E = {
+                className: "subst",
+                begin: "\\$\\{",
+                end: "\\}",
+                keywords: o,
+                contains: [],
+              },
+              d = {
+                begin: "html`",
+                end: "",
+                starts: {
+                  end: "`",
+                  returnEnd: !1,
+                  contains: [t.BACKSLASH_ESCAPE, E],
+                  subLanguage: "xml",
+                },
+              },
+              g = {
+                begin: "css`",
+                end: "",
+                starts: {
+                  end: "`",
+                  returnEnd: !1,
+                  contains: [t.BACKSLASH_ESCAPE, E],
+                  subLanguage: "css",
+                },
+              },
+              u = {
+                className: "string",
+                begin: "`",
+                end: "`",
+                contains: [t.BACKSLASH_ESCAPE, E],
+              };
+            E.contains = [
+              t.APOS_STRING_MODE,
+              t.QUOTE_STRING_MODE,
+              d,
+              g,
+              u,
+              l,
+              t.REGEXP_MODE,
+            ];
+            var b = E.contains.concat([
+                {
+                  begin: /\(/,
+                  end: /\)/,
+                  contains: ["self"].concat(E.contains, [
+                    t.C_BLOCK_COMMENT_MODE,
+                    t.C_LINE_COMMENT_MODE,
+                  ]),
+                },
+                t.C_BLOCK_COMMENT_MODE,
+                t.C_LINE_COMMENT_MODE,
+              ]),
+              _ = {
+                className: "params",
+                begin: /\(/,
+                end: /\)/,
+                excludeBegin: !0,
+                excludeEnd: !0,
+                contains: b,
+              };
+            return {
+              name: "JavaScript",
+              aliases: ["js", "jsx", "mjs", "cjs"],
+              keywords: o,
+              contains: [
+                t.SHEBANG({ binary: "node", relevance: 5 }),
+                {
+                  className: "meta",
+                  relevance: 10,
+                  begin: /^\s*['"]use (strict|asm)['"]/,
+                },
+                t.APOS_STRING_MODE,
+                t.QUOTE_STRING_MODE,
+                d,
+                g,
+                u,
+                t.C_LINE_COMMENT_MODE,
+                t.COMMENT("/\\*\\*", "\\*/", {
+                  relevance: 0,
+                  contains: [
+                    {
+                      className: "doctag",
+                      begin: "@[A-Za-z]+",
+                      contains: [
+                        {
+                          className: "type",
+                          begin: "\\{",
+                          end: "\\}",
+                          relevance: 0,
+                        },
+                        {
+                          className: "variable",
+                          begin: i + "(?=\\s*(-)|$)",
+                          endsParent: !0,
+                          relevance: 0,
+                        },
+                        { begin: /(?=[^\n])\s/, relevance: 0 },
+                      ],
+                    },
+                  ],
+                }),
+                t.C_BLOCK_COMMENT_MODE,
+                l,
+                {
+                  begin: r(
+                    /[{,\n]\s*/,
+                    s(r(/(((\/\/.*)|(\/\*(.|\n)*\*\/))\s*)*/, i + "\\s*:"))
+                  ),
+                  relevance: 0,
+                  contains: [
+                    { className: "attr", begin: i + s("\\s*:"), relevance: 0 },
+                  ],
+                },
+                {
+                  begin:
+                    "(" + t.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
+                  keywords: "return throw case",
+                  contains: [
+                    t.C_LINE_COMMENT_MODE,
+                    t.C_BLOCK_COMMENT_MODE,
+                    t.REGEXP_MODE,
+                    {
+                      className: "function",
+                      begin:
+                        "(\\([^(]*(\\([^(]*(\\([^(]*\\))?\\))?\\)|" +
+                        t.UNDERSCORE_IDENT_RE +
+                        ")\\s*=>",
+                      returnBegin: !0,
+                      end: "\\s*=>",
+                      contains: [
+                        {
+                          className: "params",
+                          variants: [
+                            { begin: t.UNDERSCORE_IDENT_RE },
+                            { className: null, begin: /\(\s*\)/, skip: !0 },
+                            {
+                              begin: /\(/,
+                              end: /\)/,
+                              excludeBegin: !0,
+                              excludeEnd: !0,
+                              keywords: o,
+                              contains: b,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    { begin: /,/, relevance: 0 },
+                    { className: "", begin: /\s/, end: /\s*/, skip: !0 },
+                    {
+                      variants: [
+                        { begin: "<>", end: "</>" },
+                        { begin: c.begin, end: c.end },
+                      ],
+                      subLanguage: "xml",
+                      contains: [
+                        {
+                          begin: c.begin,
+                          end: c.end,
+                          skip: !0,
+                          contains: ["self"],
+                        },
+                      ],
+                    },
+                  ],
+                  relevance: 0,
+                },
+                {
+                  className: "function",
+                  beginKeywords: "function",
+                  end: /\{/,
+                  excludeEnd: !0,
+                  contains: [t.inherit(t.TITLE_MODE, { begin: i }), _],
+                  illegal: /\[|%/,
+                },
+                { begin: /\$[(.]/ },
+                t.METHOD_GUARD,
+                {
+                  className: "class",
+                  beginKeywords: "class",
+                  end: /[{;=]/,
+                  excludeEnd: !0,
+                  illegal: /[:"\[\]]/,
+                  contains: [
+                    { beginKeywords: "extends" },
+                    t.UNDERSCORE_TITLE_MODE,
+                  ],
+                },
+                { beginKeywords: "constructor", end: /\{/, excludeEnd: !0 },
+                {
+                  begin: "(get|set)\\s+(?=" + i + "\\()",
+                  end: /{/,
+                  keywords: "get set",
+                  contains: [
+                    t.inherit(t.TITLE_MODE, { begin: i }),
+                    { begin: /\(\)/ },
+                    _,
+                  ],
+                },
+              ],
+              illegal: /#(?!!)/,
+            };
+          };
+        })()
+      );
+    </script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+  <body>
+    <ul>
+      <li>
+        <h1>第一题</h1>
+        <pre>
+            <code class="javascript">
+                console.log(a, b, c); //undefined undefined undefined          a
+                var a = 12,
+                  b = 13,
+                  c = 14;
+                function fn(a) {
+                  console.log(a, b, c); //10 13 14                          b
+                  a = 100;
+                  c = 200;
+                  console.log(a, b, c); //100 13 14                         c
+                }
+                b = fn(10);
+                console.log(a, b, c); //12 undefined 200                       d
+                /**
+                 * a处：
+                 * 变量提升，赋值动作会留在原位置执行，声明会提升到当前作用域顶部 所以第一个地方 undefined undefined undefined.
+                 *
+                 * b处：
+                 * 执行的 f(10)； a被赋值为10
+                 * b,c找不到去上一级作用域全局找 ，b = 13 c =14
+                 *
+                 * c处：
+                 * 原则就是当前作用域找不到就去上一级找，输出 100 13 14
+                 *
+                 * d处：
+                 * b此时等于 fn(10)函数的返回结果，没有return 默认返回undefined;
+                 * a没被改变过 12；
+                 * c被改变过 200;
+                 * 为什么a没被改变，因为fn执行时 改变的a是形参创建了一个私有的a，所以全局a没被改过
+                 */
+                 //b处：
+                 // 执行的 f(10)； a被赋值为10
+                 // b,c找不到去上一级作用域全局找 ，b = 13 c =14
+            </code>
+        </pre>
+      </li>
+      <li>
+        <h1>第二题</h1>
+        <pre>
+              <code class="javascript">
+                var i = 0;
+                function A() {
+                    var i = 10;
+                    function x() {
+                        console.log(i);
+                    }
+                    return x;
+                }
+                var y = A();
+                y();  // 10
+                function B() {
+                    var i = 20;
+                    y();
+                }
+                B(); // 10
+                /** y 是 function x(),它的作用域是 funcion A;
+                * 不管在哪里执行 y 它的作用域在创建时候就固定了
+                * 就都会找 Function A 内有没有i，有就输出，没有就继续找，找不到undefined
+                */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>第3题</h1>
+        <pre>
+              <code class="javascript">
+                    var a = 1;
+                    var obj = {
+                      name: "tom",
+                    };
+                    function fn() {
+                      var a2 = a;
+                      obj2 = obj;
+                      a2 = a;
+                      obj2.name = "jack";
+                    }
+                    fn();
+                    console.log(a); //1
+                    console.log(obj);  //{name:'jack'}
+              
+                    /**解释：
+                     * a 的值是 1;基本数据类型，就值就复制给a2，a2怎么变化与 a无关
+                     * 
+                     * 函数fn执行  obj2 = obj的时候，
+                     * 相当于 window.obj2 = window.obj;
+                     * obj2 和 obj 都储存了 对象 {name:"tom"} 的内存地址       
+                     * 就有2个变量都可以对 对象{name:"tom"} 进行操作改变
+                     * 就obj结果就是 {name:"jack"}
+                     * * /
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>第4题</h1>
+        <pre>
+              <code class="javascript">
+                    var a = 1;
+                    function fn(a) {
+                      console.log(a);  //function a
+                      var a = 2;
+                      function a() {}
+                      // console.log(a);  //如果是这里输出就是 2
+                    }
+                    fn(a);
+              
+                    /**
+                     * 解释：
+                     * js在es6之前只有函数作用域，变量的声明都会提升到当前作用域顶部
+                     * 变量的声明又有2种方式  var 和 function  (暂不考虑let const);
+                     * 就如果  变量a是只是var 声明的，赋值前输出就是undefined;赋值后输出就是 赋的那个值
+                     * 如果 变量a 同时被 var funtion 声明，function的声明优先级更高  ，输出funtion
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>第5题</h1>
+        <pre>
+              <code class="javascript">
+                    console.log(a); //undefined
+                    var a = 12;
+                    function fn() {
+                      console.log(a); //undefined
+                      var a = 13;
+                    }
+                    fn();
+                    console.log(a); //12
+            
+                  /**
+                   * 解释：
+                   * 第一个就，var a = 12 的这个a 变量声明提升到window作用域顶部
+                   * 赋值12就留在代码所在位置执行，
+                   *
+                   * 第二个也差不多，只不过 第二个a的函数作用域顶部 是 那个匿名函数
+                   *
+                   * 最后的a 在 全局变量a赋值之后输出，所以是12
+                   */
+                  ----
+            
+                    console.log(a); //undefined
+                    var a = 12;
+                    function fn() {
+                      console.log(a); //12
+                      a = 13;
+                    }
+                    fn();
+                    console.log(a); //13
+            
+                  /**解释
+                   * 第一个和第一个例子一样
+                   *
+                   * 第二个，在当前匿名函数作用域没有声明变量a,则a去上级作用域找，window.a = 12 所以输出12
+                   *
+                   * 最后输出13 ，因为 匿名函数内 a = 13；这个a不是自己定义的私有变量a，就是改的window.a 所以输出13
+                   */
+            
+                   ---
+                 
+            
+                //   console.log(a); //会报错
+                  a = 12;
+            
+                  function fn() {
+                    console.log(a);  //如果没有报错的话会输出12
+                    a = 13;
+                  }
+                  fn();
+                  console.log(a); //如果没有报错的话会输出13
+            
+                  /**解释
+                   * js里面一个变量的值undefined 实际是 已经声明或者定义了，只是没有初始化赋值而已
+                   * 你如果对 变量a 进行LHS操作，则底层会帮你创建这个变量 并 赋值为undefined
+                   * 所以就为什么 直接a = 12或者 a的其他赋值动作 ，不会报错
+                   * 而你对变量a进行 RHS操作，就是去找变量a对应的值，则直接报错，说a没有定义
+                  */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>第6题</h1>
+        <pre>
+              <code class="javascript">
+                    var foo = "hello";
+                    (function (foo) {
+                      console.log(foo); //hello      1
+                      var foo = foo || "world";
+                      console.log(foo); //hello      2
+                    })(foo);
+                    console.log(foo);  //hello       3
+              
+                    /**
+                     * 解释：
+                     * 第1个，就全局foo赋值给 私有变量形参foo,虽然它下面有声明，但是形参接收值的动作
+                     * 应该在作用域建立时，确定传入参数时就应该赋值好了
+                     * 所以下面的声明不会使得foo 输出undefined，可以看作是重复声明;
+                     * 
+                     * 第二个就 或运算。。。
+                     * 
+                     * 第三个 输出的foo是全局变量foo，整个函数操作的都是私有变量foo
+                    */
+                
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>第7题,第8题</h1>
+        <pre>
+              <code class="javascript">
+                    这个我在开课前的4次面试公开课里面听了；就不写答案了，写也都是老师的干货
+
+                    //总结几个关键部分：
+                    //块级作用域为了兼容老版本的es5（es3）; 它的变量声明在块级作用域内会给全局作用域也声明一个
+                    //但仅仅只是声明，function 也只是声明部定义
+                    //块级作用域内遇到 function foo 会把这句之前的都赋值给全局function foo一份
+                    //之后都是内部私有操作
+
+                    //当参数部分有默认赋值，并且函数体内部有声明时
+                    //会创建2个作用域，一个是自己独立的块级作用域
+                    //一个是有点像原型继承的作用域，这个域找不到变量向上找全局
+                
+                
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>二、数据类型和基础知识作业</h1>
+        <h2>1.</h2>
+        <pre>
+              <code class="javascript">
+                    let result = 100 + true + 21.2 + null + undefined + "Tencent" + [] + null + 9 + false;
+                  console.log(result);  //"NaNTencentnull9false"
+                  /**解释
+                   * 在undefined之前都是转成number进行运算，直到undefined的number是NaN，NaN与数字的运算都是NaN
+                   * 之后开始就全部是字符串拼接，因为遇到“Tencent”字符串了
+                   * String([]) ==> ""  String(null) ==> "null";
+                   * 最后 "NaNTencentnull9false"
+                   */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>2.</h1>
+        <pre>
+              <code class="javascript">
+                    {}+0 ? alert("ok") : alert("no");  //alert('no')
+                    0 + {} ? alert("ok") : alert("no"); //alert('yes')
+              
+                    /**
+                     * 解释：
+                     * {} + 0 ；{}在一行句首被视为 代码块；实际则判断 +0？ 0转成bool就是false
+                     * 0 + {}; 这个就字符串拼接；因为{}在后面是个对象，对象的+运算，转换成""[object object]"进行字符串拼接
+                     * 它的bool判断，是true， 隐式转换成bool为false的只有那固定的 "",null,undefined,NaN,0
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>3.</h1>
+        <pre>
+              <code class="javascript">
+                    let res = Number("12px");
+                    if (res === 12) {
+                      alert(200);
+                    } else if (res === NaN) {
+                      alert(NaN);
+                    } else if (typeof res === "number") {
+                      alert("number");
+                    } else {
+                      alert("Invalid Number");
+                    }
+                    //alert('number')
+                    /**解释：
+                     * res 的值 是 NaN,因为字符串”12px“不全是数字；
+                     * 而NaN的类型是数字类型，但是代表的含义是 不是数字
+                     * 且不与任何数字类型值（包括自己）相等
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>4.</h1>
+        <pre>
+              <code class="javascript">
+                    let arr = [27.2, 0, "0013", "14px", 123];
+                    arr = arr.map(parseInt);
+                    console.log(arr);
+              
+                    //[[27, NaN, 1, 1, 27]]
+              
+                    /**解释
+                     * map接收一个函数，（item,index）=>{}
+                     * 刚好和parseInt对应，parseInt函数第一个参数是字符串，第二个是进制
+                     * parseInt(27.2,0)   0，10,不写默认十进制，27.2 ==> 27
+                     * parseInt(0,1)    //进制取值范围是 [2,36]，这个就当规则记好了，1进制就NaN
+                     * parseInt("0013",2) 只有1符合，就 1 * 2^0 = 1
+                     * parseInt("14px",3)  也只有1 符合， 1 * 3^0 = 1
+                     * parseInt(123,4)   这个都符合，3*4^0 + 2*4^1 + 1*4^2 = 3 + 8 + 16 = 27
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h1>三.闭包作用域作业</h1>
+        <h2>1</h2>
+        <pre>
+              <code class="javascript">
+                    var a = 10,
+                      b = 11,
+                      c = 12;
+                    function test(a) {
+                      a = 1;
+                      var b = 2;
+                      c = 3;
+                    }
+                    test(10);
+                    console.log(a, b, c);  // 10 11 3
+              
+                  /**
+                   * 解释：
+                   * 函数test在执行时，形参用a声明了，所以函数体内部的变量a还是私有变量a
+                   * 变量b在函数体内声明，私有变量b的作用域是test，也不影响全局变量b
+                   * c，test函数作用域里面没有，所以找到了window.c，并赋值 3 所以是3
+                   * 
+                   * 如果test(d)用d来接收，那么a就会改变为1
+                   * */   
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>2</h2>
+        <pre>
+              <code class="javascript">
+                    var a = 4;
+                    function b(x, y, a) {
+                      console.log(a);  //3
+                      arguments[2] = 10; 
+                      console.log(a);  // 10
+                    }
+                    a = b(1, 2, 3);
+                    console.log(a);  //undefined
+              
+                    /**
+                     * 解释
+                     * function b(x,y,a) 这里形参a，实际传入的时候有赋值 3 ，所以第一个输出3
+                     * 
+                     * arguments是函数内置的存储参数的类数组，传入的实参都在这里
+                     * 形参实际是给人看的，程序真正只会读arguments,程序不管你形参的变量名什么的
+                     * 
+                     * argumens[2] 就是第三个a，私有变量，重新赋值 10
+                     * 
+                     * 最后的 a  是输出全局变量a，这个a是函数b的返回值， 函数b没有返回值默认返回undefined
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>3</h2>
+        <pre>
+              <code class="javascript">
+                    var a = 9;
+                    function fn() {
+                      a = 0;
+                      return function (b) {
+                        return b + a++;
+                      };
+                    }
+                    var f = fn();
+                    console.log(f(5));   //5  a：1
+                    console.log(fn()(5));  // 5  a:1
+                    console.log(f(5));  //6 a:2 
+                    console.log(a); //2
+              
+                    /**
+                     * 解释
+                     * var f = fn() ;这里f = fn里面的匿名函数 funtion(b);
+                     * fn执行时，是没有定义变量a的，所以a一直都是全局变量a；
+                     * 这一步就把a = 0执行了，所以window.a = 0
+                     * 
+                     * 第一次执行，f(5); 就是执行 b + a++，b为5, a自己没有，找function fn， fn也没有 继续找全局，全局有a,a=0
+                     * 所以第一次输出5 ；a 执行完后自增 为 1
+                     * 
+                     * 第二次 fn()(5) 相当于重来一遍;  还是 输出5；a自增为1
+                     * 
+                     * 第三次f(5); 还是执行 b + a++；b为5；a为1;所以执行完后，输出6 ，a自增为2；
+                     * 
+                     * 最后输出a; a 就是2
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>4</h2>
+        <pre>
+              <code class="javascript">
+                    var test = (function (i) {
+                      return function () {
+                          console.log(arguments);
+                        alert((i *= 2));
+                      };
+                    })(2);
+                    test(5);
+                    //alert(4)
+              
+                    /**
+                     * 解释
+                     * test = 立即执行函数的返回值，返回值是一个不需要参数的函数
+                     * 
+                     * test = function(){ alert(2 *=2)}
+                     * 
+                     * test(5)这个5没什么意义，之前有写说；参数实际都是给程序员看的，便于人理解
+                     * 对于程序而言，只看arguments，arguments给你存， arguments[0] = 5
+                     * 但是你函数体内部用不用是另一回事
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>5</h2>
+        <pre>
+              <code class="javascript">
+                    var x = 4;
+                    function func() {
+                      return function (y) {
+                        console.log(y + --x);
+                      };
+                    }
+                    var f = func(5);
+                    f(6);   // 9
+                    func(7)(8);  //10
+                    f(9); //10
+                    console.log(x); //1
+              
+                    /**
+                     * 解释
+                     * var f = func(5); func(5)返回了func内部那个匿名函数 function(y){console.log(y + --x);}
+                     * 所以 f()就是调用那个函数；
+                     * 这个5也没什么用，虽然说是有闭包，但是func里面没有创建任何私有变量；所以匿名函数最后还是会找到全局作用域
+                     * 
+                     * f(6) 就是  6 + （--4）  输出9； 全局x = 3
+                     * func(7)(8) 又产生新的匿名函数，执行  8 + （--3） 输出10；全局x = 2；然后这个匿名函数没有变量接收，应该会销毁
+                     * 
+                     * f(9);9 + ( -- 2) 输出10，全局x = 1
+                     * 
+                     * 输出全局1
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>6</h2>
+        <pre>
+              <code class="javascript">
+                    var x = 5,
+                      y = 6;
+                    function func() {
+                      x += y;
+                      func = function (y) {
+                        console.log(y + --x);
+                      };
+                      console.log(x, y);
+                    }
+                    func(4);
+                    func(3);
+                    console.log(x, y);
+                    
+                    //  11 6     
+                    //  15
+                    // 10 6
+              
+                    /**解释
+                     * func(4)  第一次执行，3个动作;这个4没什么用
+                     * 1. x +=y ；这2个变量当前作用域没有创建，全局找，所以x = 11;y =  6
+                     * 2.重新定义func，新创建了一个匿名函数给它，但是也没有变量是老的func里面新建立的，就全是全局变量；
+                     * 3.输出 x,y   11 6
+                     * 
+                     * func(3) 第二次执行 function(y) {console.log(y + --x)}；这个3被私有变量y接收；所以 3 + （--11） = 13
+                     * 
+                     * 最后输出x,y  y一直就没变6，x在上一次中自减1 就输出10
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>7</h2>
+        <pre>
+              <code class="javascript">
+                    function fun(n, o) {
+                      console.log(o);
+                      return {
+                        fun: function (m) {
+                          return fun(m, n);
+                        },
+                      };
+                    }
+                    var c = fun(0).fun(1);  //undefined 0
+                    c.fun(2);    // 1
+                    c.fun(3);    //1
+              
+                    /**解释
+                     * var c = fun(0).fun(1);
+                     * 先执行 fun(0); 所以n = 0; o = undefined；fun(0)的返回值是一个对象而又调用了该对象的fun
+                     * 
+                     * 其实函数在堆里面的地址都是同一个，但是这样循环调用的时候，就调用栈和执行栈一直在重复变。每次都一个新对象，
+                     * 所以fun(0).fun(1) 执行的是fun(1,0) 所以重新执行的函数的新的作用域里的新的私有变量就是0；输出 0 
+                     * 
+                     * c 此时是 指向一个对象的 这个对象是 {fun:function(m,1)}
+                     * 
+                     * c.fun(2)执行，fun(2,1)，又重新调用fun 又新的私有变量0 等于 1; 但是这个函数的返回值没有接收；
+                     * 
+                     * c.fun(3) 这个与 c.fun(2)同，因为上一步c.fun(2)没有对c有什么操作，就c 还是指向 {fun:function(m,1)}
+                     * 
+                     * 继续输出1 
+                    */
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>8.闭包的理解</h2>
+        <pre>
+              <code class="javascript">
+                   闭包说的生动点，就是函数记住它自己被创建时候的作用域上下文；
+                   还有一种理解就是，当函数运行在不是它被创建的作用域下的时候，就可以说产生了闭包。
+                   优缺点：优点就是可以保护一些变量，防止全局污染，缺点就是占内存
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>9.var let区别</h2>
+        <pre>
+              <code class="javascript">
+                  let 有很多新特性，使得js更规范了，或者说更像一门普世的编程语言，就块级作用域，没有变量提升，暂时性死区等待叭
+                  如果一个变量你确幸不会改变，推荐用const；
+                  var 就声明的一种方式叭。
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>10.下面代码输出的结果是多少，为什么？如何改造一下，就能让其输出 20 10？</h2>
+        <pre>
+              <code class="javascript">
+                var b = 10;
+                (function b() {
+                    b = 20;
+                    console.log(b);
+                })();
+                console.log(b);
+
+                最后这个肯定输出10; 里面这个不清楚;
+                改早就 var b = 20
+              </code>
+          </pre>
+      </li>
+      <li>
+        <h2>11 12听老师讲过了</h2>
+      </li>
+
+      <li>
+        <h1>四、THIS的作业题</h1>
+        <h2>1.</h2>
+        <pre>
+            <code class="javascript">
+                  var num = 10; //60  30
+                  var obj = {
+                    num: 20,
+                  };
+                  obj.fn = (function (num) {
+                    this.num = num * 3;
+                    num++;  //21  11
+                    return function (n) {
+                      this.num += n;  //65
+                      num++;   //22
+                      console.log(num);  //22
+                    };
+                  })(obj.num);
+                  var fn = obj.fn;
+                  fn(5);
+                  obj.fn(10);
+                  console.log(num, obj.num);  //65
+            
+                  /**
+                   * 解释：
+                   * 
+                   * 先执行的是 闭包(function(num){...})(obj.num)；
+                   * obj.num 20传给闭包内部，私有变量num接收，num = 20;
+                   * this虽然有4情况，隐式显示new和window,但实际上可以总结一句话为指向调用者，没调用者其实window就调用者;
+                   * 闭包就没有调用者，所以此时的this就是window,window.num = 20 * 3 = 60；
+                   * num是私有变量，20++ = 21；返回了一个匿名函数fun(n);
+                   * fn  == obj.fn 的内存地址，就指向这个函数；
+                   * 
+                   * fn(5)执行，function(n) 匿名函数直接执行，this指向window；所以window.num +=5 = 65
+                   * num++这个num当前作用域没有，找上级，上级是那个闭包自执行函数，num是21 ,所以此时又自增 为22；输出22
+                   * 
+                   * obj.fn(10),注意当以这种方式调用时，存在调用者，调用栈是obj,可以看作是，fn是全局下的方法，obj.fn是obj的一个属性方法，但都指向同一个函数，
+                   * 区别就是调用栈不同
+                   * this.num+= 10； obj.num = 20所以，obj.num = 30
+                   * num++；这里同样，num当前没有，上级找到那个闭包，闭包里Num已经是22了,自增为23
+                   * 最后就对应输出
+                   * 
+                  */
+            </code>
+        </pre>
+      </li>
+      <li>
+          <h2>2.</h2>
+          <pre>
+            <code class="javascript">
+                    let obj = {
+                      fn: (function () {
+                        return function () {
+                          console.log(this);
+                        };
+                      })(),
+                    };
+                    obj.fn();    // obj
+                    let fn = obj.fn; 
+                    fn();//window
+              
+                    /**
+                     * 解释：
+                     * 其实栈里面的变量，都是字面量或者内存地址，函数作为一种对象，真正是存在内存里面的，
+                     * 也可能有特别的可能不在内存里，static静态方法？这里我有点模糊了
+                     * 
+                     * 所以对于，最后的那个匿名函数返回this的，obj.fn 和 fn都指向那个匿名函数，
+                     * 区别只在于调用栈不同，fn就是winodw，obj.fn就是obj
+                    */
+            </code>
+        </pre>
+          
+      </li>
+      <li>
+        <h2>3.</h2>
+        <pre>
+          <code class="javascript">
+                var fullName = "language";
+                var obj = {
+                  fullName: "javascript",
+                  prop: {
+                    getFullName: function () {
+                      return this.fullName;
+                    },
+                  },
+                };
+                console.log(obj.prop.getFullName());  //'undefined'
+                var test = obj.prop.getFullName;
+                console.log(test());  //'language'
+          
+                /**
+                 * 解释：
+                 * this的传递其实只能传一层，很好理解，因为一个函数一次只能有一个调用栈，这个this就明确的指向调用者；就一层
+                 * 
+                 * 第一个undefined；
+                 * 因为函数执行时的this，是指向
+                 * {
+                 *    getFullName: function () {
+                          return this.fullName;
+                      }
+                  }这个对象的，而这个对象没有fullName这个属性，没有就创建并赋值undefined,属于LHS这种
+          
+                  后面这个test 也指向同一个匿名函数，此时的调用者可以理解为window，因为在全局下运行，所以就指向window
+                */
+          </code>
+      </pre>
+    </li>
+    <li>
+        <h2>4.</h2>
+        <pre>
+          <code class="javascript">
+            var name = "window";
+            var Tom = {
+              name: "Tom",
+              show: function () {  ///1
+                console.log(this.name);
+              },
+              wait: function () {    //2
+                var fun = this.show;
+                fun();
+              },
+            };
+            Tom.wait(); //window
+      
+            /**
+             * 就还是之前解释的；
+             * 变量，这些都是栈里面，总归是存的内存地址；真正的函数在堆里面
+             * 
+             * Tom.wait 调用了 funchton2 , function2 的调用者是 Tom,所以this指向Tom
+             * 
+             * 在function 2  里面创建了一个变量 ，这个变量  和 Tom.show 指向同一个函数
+             * 
+             * 但是这个变量没有调用者，wait有调用者，但是这个变量是没有调用者的，它只是在obj.wait这个函数的作用域下执行，
+             * 但是不代表它被Tom调用，没有则默认window调用
+             * 
+             * 
+             * window.name = ”window“ 输出window
+             */
+          </code>
+      </pre>
+    </li>
+    <li>
+        <h2>5.</h2>
+        <pre>
+          <code class="javascript">
+                window.val = 1;
+                var json = {
+                  val: 10,
+                  dbl: function () {
+                    this.val *= 2;
+                  },
+                };
+                json.dbl();   //json.val = 20
+                var dbl = json.dbl;  
+                dbl();  //window.val = 2
+                json.dbl.call(window);  //window.val = 4
+                alert(window.val + json.val);  // 24
+          
+                /**
+                 * 解释
+                 * json.dbl(),调用者 json, json.val = 20;
+                 * dbl() 调用者window.val = 2
+                 * json.dbl.call(window)   call就是修改this的指向，window.val = 4
+                 * 输出24
+                */
+          </code>
+      </pre>
+    </li>
+    <li>
+        <h2>6.</h2>
+        <pre>
+          <code class="javascript">
+            (function () {
+                var val = 1;
+                var json = {
+                  val: 10,
+                  dbl: function () {
+                    val *= 2;
+                  },
+                };
+                json.dbl(); //2
+                alert(json.val + val);  //12
+              })();
+
+              这题没亮点我感觉
+          </code>
+      </pre>
+    </li>
+    </ul>
+  </body>
+</html>

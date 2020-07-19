@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<script>
+  </head>
+  <body>
+    <!-- <script>
     Array.prototype.quchong = function () {
         var arr = this;
         var result = [];
@@ -62,6 +62,34 @@
     var a = [1, 2, 3, 4, 5, 6, 5, 3, 2, 4, 56, 4, 1, 2, 1, 1, 1, 1, 1, 1,];
     var b = a.distinct();
     console.log(b.toString()); //1,2,3,4,5,6,56
-</script>
-</body>
+</script> -->
+    <script>
+      let a = 0,
+        b = 0;
+      function A(a) {
+        A = function (b) {
+          alert(a + b++);
+        };
+        alert(a++);
+      }
+
+      A(1);
+      A(2);
+    </script>
+    <script>
+      var a = 1;
+      var obj = {
+        name: "tom",
+      };
+      function fn() {
+        var a2 = a;
+        obj2 = obj;
+        a2 = a;
+        obj2.name = "jack";
+      }
+      fn();
+      console.log(a);
+      console.log(obj);
+    </script>
+  </body>
 </html>

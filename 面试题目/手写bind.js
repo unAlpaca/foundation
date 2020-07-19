@@ -38,3 +38,7 @@ console.log(res()); // res ==> {name:'alibaba',total:300}
 
 //bind是不会立即执行，所以会预先处理，先绑定this，先传参等deng
 
+function a(){
+    
+}
+
