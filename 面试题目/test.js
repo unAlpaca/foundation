@@ -1,40 +1,24 @@
-
-var t1 = new Date().getTime()
-for (let i = 0; i < 100; i++) {
-    for (let j = 0; j < 1000; j++) {
-        for (let k = 0; k < 10000; k++) {
-        }
+class Modal{
+    static z = 10;
+    static n=200
+    constructor(x,y){
+        this.x = x;
+        this.y =y
+    }
+    getX(){
+        console.log(this.x);
+    }
+    getY(){
+        console.log(this.y);
     }
 }
-var t2 = new Date().getTime()
-console.log('first time', t2 - t1)
+Modal.setNumber=function(n){
+    this.n=n;
+};
 
-for (let i = 0; i < 10000; i++) {
-    for (let j = 0; j < 1000; j++) {
-        for (let k = 0; k < 100; k++) {
-
-        }
-    }
-}
-var t3 = new Date().getTime();
-console.log('two time', t3 - t2)
-
-for (let i = 0; i < 10000; i++) {
-    for (let j = 0; j < 1000; j++) {
-        for (let k = 0; k < 100; k++) {
-
-        }
-    }
-}
-var t4 = new Date().getTime()
-console.log('three time', t4 - t3)
-
-for (let i = 0; i < 10000; i++) {
-    for (let j = 0; j < 1000; j++) {
-        for (let k = 0; k < 100; k++) {
-
-        }
-    }
-}
-var t5 = new Date().getTime()
-console.log('fout time', t5 - t4)
+let m = new Modal(10,20);
+console.log(m);
+console.log(m.x);
+console.log(m.y);
+console.log(m.hasOwnProperty('z'));
+console.log(m.n);
