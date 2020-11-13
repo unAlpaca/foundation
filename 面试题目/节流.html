@@ -16,19 +16,27 @@
         background-color: #ccc;
         font-size: 80px;
       "
-    ></div>
+    >0</div>
+    <div>点击次数</div>
+    <span id="cont">0</span>
     <script>
-      let num = 1;
+      let num = 0;
+      let countNum = 0
+      
       let content = document.getElementById("content");
+      let cont = document.getElementById("cont");
 
       function count() {
-        content.innerHTML = num++;
+        content.innerHTML = ++num;
       }
       // content.onmousemove = count;
 
       //时间戳版
       function throttle(func, wait) {
+        console.log(1)
         let previous = 0;
+        cont.innerHTML = ++countNum
+
         return function () {
           let now = Date.now();
           let context = this;
@@ -40,22 +48,24 @@
         };
       }
 
-      //定时器版
-      function throttle(func, wait) {
-        let timeout;
-        return function () {
-          let context = this;
-          let args = arguments;
-          if (!timeout) {
-            timeout = setTimeout(() => {
-              timeout = null;
-              func.apply(context, args);
-            }, wait);
-          }
-        };
-      }
+      // //定时器版
+      // function throttle(func, wait) {
+      //   let timeout;
+      //   return function () {
+      //     let context = this;
+      //     let args = arguments;
+      //     cont.innerHTML = ++countNum
+        
+      //     if (!timeout) {
+      //       timeout = setTimeout(() => {
+      //         timeout = null;
+      //         func.apply(context, args);
+      //       }, wait);
+      //     }
+      //   };
+      // }
 
-      content.onmousemove = throttle(count, 1000);
+      content.onclick = throttle(count, 1000);
     </script>
   </body>
 </html>

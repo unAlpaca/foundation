@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="jia(2)">+</button>
+    <span id="countDisplay"></span>
+    <button onclick="jian(2)">-</button>
+  </body>
+  <script>
+    const countDisplay = document.querySelector("#countDisplay");
+    const countstate = {
+      count: 10
+    };
+
+    const renderCount = state => {
+      countDisplay.innerHTML = state.count;
+      console.log(countDisplay);
+    };
+
+    renderCount(countstate);
+
+
+    //以下都是归类为可触发的动作，用dispatch去封装
+    const jian = n => {
+      countstate.count -= n;
+      renderCount(countstate);
+    };
+
+    const jia = n => {
+      countstate.count += n;
+      renderCount(countstate);
+    };
+  </script>
+</html>

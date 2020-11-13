@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="store.dispatch({type:'jia',n:2})">+</button>
+    <span id="countDisplay">10</span>
+    <button onclick="store.dispatch({type:'jian',n:3})">-</button>
+  </body>
+  <script>
+    //元素id
+    const countDisplay = document.querySelector("#countDisplay");
+
+
+    /注释/ 
+    //store 这里作为store传入的原始数据
+    // const countstate = {
+    //   count: 10
+    // };
+
+    //每次修改都是修改的元数据，所以return一个新的/;
+    const changeState = (state, action) => {
+
+      /在这里初始化一个state/
+      if(!state) {
+        state = {
+          count:10
+        }
+      }
+      switch (action.type) {
+        case "jian":
+          return {
+            ...state,
+            count: state.count - action.n
+          };
+        case "jia":
+          return {
+            ...state,
+            count: state.count + action.n
+          };
+        default:
+          return state;
+      }
+    };
+
+    //1.这里定义store来获取原始store
+    const createStore = (changeState) => {
+      let state = null;
+      const getState = () => state;
+      // 封装所有的动作
+      const dispatch = action => {
+        //每次return一个新的state要重新赋值给state/ 
+        state = changeState(state, action);
+        listeners.forEach(listener => listener());
+      };
+
+      //用一个数组把所有监听保留起来执行
+      const listeners = [];
+      const subscribe = listener => {
+        listeners.push(listener);
+      };
+
+      //返回2个方法，一个是获取state，一个是改变state
+      return {
+        getState,
+        dispatch,
+        subscribe
+      };
+    };
+
+    const renderCount = () => {
+      countDisplay.innerHTML = store.getState().count;
+    };
+
+    // 此时的store内含2个方法
+    /不要每次都传入state,/ 
+    // const store = createStore(countstate, changeState);
+    const store = createStore(changeState);
+
+    store.subscribe(renderCount);
+  </script>
+</html>

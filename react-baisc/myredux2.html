@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="dispatch({type:'jia',n:2})">+</button>
+    <span id="countDisplay"></span>
+    <button onclick="dispatch({type:'jian',n:3})">-</button>
+  </body>
+  <script>
+
+    //元素id
+    const countDisplay = document.querySelector("#countDisplay");
+
+    //store
+    const countstate = {
+      count: 10
+    };
+
+    //重新渲染
+    const renderCount = state => {
+      countDisplay.innerHTML = state.count;
+    };
+
+    renderCount(countstate);
+
+    // 封装所有的动作
+    const dispatch = action => {
+      changeState(action);
+      renderCount(countstate);
+    };
+
+    const changeState = action => {
+      switch (action.type) {
+        case 'jian':
+          countstate.count -= action.n;
+          break
+        case 'jia':
+          countstate.count += action.n;
+          break
+        default:
+          break;
+      }
+    };
+
+    // 更进一步优化：将state和changeState封装再一起。
+  </script>
+</html>

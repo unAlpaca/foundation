@@ -25,12 +25,53 @@
         console.log(5);
     }
 
-    // console.log(window.getName);
+
+
     Foo.getName();//2
+
+    getName(); 
+
+    Foo().getName();
+
+    new Foo.getName(); //2
+
+    new Foo().getName() //3  
+    //
+    new new Foo().getName()//3  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // console.log(window.getName);
 
          // window.getName();
 
-    getName(); //4  getName的函数声明会提升，所以最后一步是 getName=function 4 那一个
 
     Foo().getName(); //1  Foo的返回值是window, window.getName() 这就把全局环境下的getName输出4那个也覆盖掉了
                      // 可以在空处输出window.getName,前面等于4后面等于1，所以说明确实是覆盖了

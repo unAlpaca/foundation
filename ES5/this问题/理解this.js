@@ -2,7 +2,6 @@ function foo(num){
     console.log("foo:" + num);
 
     this.count++;
-    console.log(this,'1')
 }
 
 foo.cout = 0;

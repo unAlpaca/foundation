@@ -6,7 +6,7 @@ class Queue {
 	//enqueue 在队尾添加一个元素
 	enqueue(item){
 		this.dataStore.push(item)
-	},
+	}
 
 	//dequeque 删除队首元素
 	dequeque(){
@@ -16,7 +16,8 @@ class Queue {
 	//读取队首 和 队尾
 	front(){
 		return this.dataStore[0]
-	},
+	}
+	
 	back(){
 		return this.dataStore[this.dataStore.length - 1];
 	}
