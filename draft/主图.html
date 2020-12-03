@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="./echarts.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width: 100%;height: 100vh;"></div>
+    <script>
+
+        var myChart = echarts.init(document.getElementById('main'));
+
+
+
+        var schools = [
+            "重庆大学1", "重庆大学2", "重庆大学3", "重庆大学4",
+            "重庆大学5", "重庆大学6", "重庆大学7", "重庆大学8",
+            "重庆大学9", "重庆大学10", "重庆大学11", "重庆大学12",
+            "重庆大学13", "重庆大学14", "重庆大学15", "重庆大学16",
+            "重庆大学17", "重庆大学18", "重庆大学19", "重庆大学20",
+            "重庆大学21", "重庆大学22", "重庆大学23", "重庆大学24",
+            "重庆大学25", "重庆大学26", "重庆大学27", "重庆大学28",
+            "重庆大学29", "重庆大学30", "重庆大学31", "重庆大学32", 
+            "重庆大学33", "重庆大学34", "重庆大学35", "重庆大学36", 
+            "重庆大学37", "重庆大学38", "重庆大学39", "重庆大学40",
+            // "重庆大学41", "重庆大学42", "重庆大学43", "重庆大学44", 
+            // "重庆大学45", "重庆大学46", "重庆大学47", "重庆大学48", 
+            // "重庆大学49", "重庆大学50", "重庆大学51", "重庆大学52", 
+            // "重庆大学53", "重庆大学54", "重庆大学55", "重庆大学56", 
+            // "重庆大学57", "重庆大学58", "重庆大学59", "重庆大学60",
+            // "重庆大学71", "重庆大学72", "重庆大学73", "重庆大学74", 
+            // "重庆大学75", "重庆大学76", "重庆大学77", "重庆大学78", 
+            // "重庆大学79", "重庆大学80",
+            // "重庆大学81", "重庆大学82", "重庆大学83", "重庆大学84", 
+            // "重庆大学85", "重庆大学86", "重庆大学87", "重庆大学88", 
+            // "重庆大学89", "重庆大学90",
+            // "重庆大学91", "重庆大学92", "重庆大学93", "重庆大学94", 
+            // "重庆大学95", "重庆大学96", "重庆大学97", "重庆大学98", 
+            // "重庆大学99", "重庆大学100",
+        ];
+
+        var days = [
+        '100%', '99%', '98%', '97%', '96%', '95%', '94%', '93%', '92%','91%','90%',
+            '89%', '88%', '87%', '86%', '85%', '84%', '82%', '81%', '80%','79%','78%'
+        ];
+        var list = []
+        for (let i = 0; i < 40; i++) {
+            let item = [];
+            item.push(Math.floor(Math.random() * 5))
+            item.push(i);
+            item.push(Math.floor(Math.random() * 5));
+            list.push(item)
+        }
+        console.log(list);
+        data = list;
+        idd = 0;
+
+        option = {
+            title: {
+                text: 'Punch Card of Github',
+                link: 'https://github.com/pissang/echarts-next/graphs/punch-card'
+            },
+            legend: {
+                data: ['Punch Card'],
+                left: 'right'
+            },
+            polar: {},
+            tooltip: {
+                axisPointer: {
+                    type: 'cross'
+                },
+                formatter: function (params) {
+                    console.log(idd);
+                    return schools[idd] + ' 通过率' + list[idd][1]  + '%,点击查看详情';
+                }
+            },
+            angleAxis: {
+                type: 'category',
+                polarIndex:0,
+                data: schools,
+                boundaryGap: false,
+                startAngle: 0,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#999',
+                        type: 'dashed'
+                    }
+                },
+                axisLine: {
+                    show: false
+                },
+                axisLabel: {
+                    interval: 0
+                }
+            },
+            radiusAxis: {
+                type: 'category',
+
+                data: days,
+                axisLine: {
+                    show: false
+                },
+                axisLabel: {
+                    rotate: 45,
+                    interval:1
+                }
+            },
+            series: [{
+                name: 'Punch Card',
+                type: 'scatter',
+                coordinateSystem: 'polar',
+                symbolSize: function (data) {
+                    return Math.sqrt(data[2]) + Math.floor(Math.random()*30);
+                },
+                data: data,
+                animationDelay: function (idx) {
+                    return idx * 5;
+                },
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(247, 66, 88, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(251, 118, 123)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(194, 16, 72)'
+                    }])
+                }
+            }],
+            dataZoom:{}
+        };
+        
+        
+        myChart.setOption(option);
+
+        myChart.on('click', function (param) {
+            console.log(param);//这里根据param填写你的跳转逻辑
+        });
+
+        myChart.on('mouseover', function (param) {
+            idd = param["data"][1];
+            console.log(param);//这里根据param填写你的跳转逻辑
+        });
+    </script>
+</body>
+
+</html>
