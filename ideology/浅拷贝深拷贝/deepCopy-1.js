@@ -39,3 +39,16 @@ const target = {
 
 console.log(clone(target));
 
+function clone2(target){
+    let obj = Object.create(null);
+    if(typeof target == Object ){
+        for(let key in target){
+            obj[key] = arguments.callee(target[key])
+        }
+    }else {
+        return target
+    }
+}
+
+
+

@@ -86,8 +86,3 @@ Observer.regist('test2',function(e){
 Observer.remove('test2',function(e){
 	console.log(e.target,e.args.msg,3)
 })
-
-
-var p = [1,2,3];
-p.splice(2,1);
-console.log(p)
