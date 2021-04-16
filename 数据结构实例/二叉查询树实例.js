@@ -15,4 +15,6 @@ function BST(){
 	this.inOrder =  inOrder;
 }
 
-function insert
+function insert(){
+
+}

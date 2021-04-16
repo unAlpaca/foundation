@@ -1,7 +1,9 @@
 // 2s 之后返回双倍的值
 function doubleAfter2seconds(num) {
     return new Promise((resolve, reject) => {
+        console.log(10);
         setTimeout(() => {
+            console.log(11);
             resolve(2 * num)
         }, 2000);
     })
@@ -10,17 +12,33 @@ function doubleAfter2seconds(num) {
 async function testResult () {
     console.log(3);
     
-    let result = await doubleAfter2seconds(30);
+    let result = await doubleAfter2seconds(30).then(()=>{
+        console.log(12);
+    });
 
-    console.log(4);
-    
-    console.log(result);
+    return new Promise((resolve,reject)=>{
+        console.log(4,result);
+        resolve(result)
+    })
+
+
 }
 
 console.log(1);
 
-testResult();
+testResult().then(res=>{
+    console.log(res);
+    console.log(20);
+});
 
 console.log(2);
 
-// 2s 之后，输出了60. 
+//1
+//3
+//10  红任务：[s1,]
+//2
+//11 微任务[12,]
+//12
+// 4 微任务 [res,20]
+// res
+// 20

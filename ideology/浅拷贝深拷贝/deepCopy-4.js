@@ -7,8 +7,6 @@
 */
 
 function clone(target,map=new Map()){
-    
-
     if(typeof target == Object){
         let cloneTarget = Array.isArray(target)? [] : {};
         if(map.has(target)) return map.get(target)

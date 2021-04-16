@@ -5,17 +5,20 @@
         context = context == undefined?window:context; 
 
         let type = typeof context;
+        console.log(type);
         if(!/^(object|function)$/.test(type)){
 
             if((/^(symbol|bigint)$/.test(type))){
-                context = Object(context)
+                context = new Object(context)
             }else{
                 context = new context.constructor(context)
             }
         }
 
         return function anonymous(...innerArgs){
-            _this.call(context,...args.concat(innerArgs))
+            console.log(arguments)
+
+            _this.call(context,...args,...innerArgs)
         }
     }
 
@@ -29,7 +32,9 @@ let obj = {
 
 function func(x,y){
     this.total = x + y;
-    return this
+    console.log(x);
+    console.log(y);
+    // return this
 }
 
 let res = func.myBind(obj,100,200)
