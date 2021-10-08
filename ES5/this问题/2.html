@@ -21,7 +21,7 @@
         a: 2
     }
 
-    var bar = foo.call(obj1);
+    var bar = foo.call(obj1)();
     /**相当于有一个对象的方法在OBJ1执行,结果就是
      * obj1 = {
      *   a:2,
@@ -33,6 +33,7 @@
      * 而这个bar就相当于指向这个方法，且这个函数的this通过箭头函数的形式已经绑定到了foo，与foo一致。
      * 即，谁调用foo,this指向谁
      * */
+     debugger
     console.log(obj1);
 
     /**

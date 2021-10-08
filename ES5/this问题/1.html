@@ -5,7 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<script>
+    <form action="http://www.baidu.com">
+    
+        <button type="submit">提交</button>
+    </form>
+<script type="text">
     function Foo() {                  /**这个getName是全局函数，并不属于这个FOO*/
         getName = function () {
             console.log(1)
@@ -19,11 +23,41 @@
 
 
     Foo.getName();                  /**直接执行了FOO的实例属性*/
-    var a = new Foo();              /**Foo函数遇到new就会执行了构造函数模式，创建一个新对象，并绑定其原型到自己
+    var a = new Foo();    
+    
+    debugger
+              /**Foo函数遇到new就会执行了构造函数模式，创建一个新对象，并绑定其原型到自己
                                         所以*/
     console.log(a.__proto__ == Foo);
     // a.getName()
-</script>
 
+    let Foo2 = ()=>{
+        console.log(2)
+    }
+</script>
+<script type="text">
+function cb(a,b){
+    console.log(typeof a,'a')
+    console.log(typeof b,'b')
+    return  a + b
+}
+
+var t = cb("c")
+console.log(t,typeof t,'t')
+</script>
+<script>
+    let arr = [1,2]
+
+    let arr2 = arr.map(item => item + 1)
+
+    let arr3 = arr.filter(item => item >1)
+
+    let arr4 =arr.any((item) => { 
+        if(item > 1){
+            return item
+        }
+    })
+
+</script>
 </body>
 </html>

@@ -14,8 +14,8 @@ const state = reactive({
 })
 
 
-// state.name = '张三'
+state.name = '张三'
 // state.age = 26
 // state.info.job = 'lawer'
-state.info.students.push({id:3,name:'realman'})
+// state.info.students.push({id:3,name:'realman'})
 console.log(state);
